@@ -1,101 +1,45 @@
-<mxfile host="Electron" modified="2026-09-12T19:05:00.000Z" agent="DomoNow Architecture Team" version="21.6.8" type="device">
+<mxfile host="Electron" modified="2026-09-12T19:25:00.000Z" agent="DomoNow Architecture Team" version="21.6.8" type="device">
   <diagram id="c4-context-diagram" name="C4 Nivel 1 - Contexto del Sistema">
-    <mxGraphModel dx="1422" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" background="#F8FAFC" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="950" background="#F8FAFC" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         
         <!-- Titulo y Metadatos -->
-        <mxCell id="title_block" value="&lt;b style=&quot;font-size: 22px; color: #0F172A;&quot;&gt;DomoNow PropTech Platform - Diagrama de Contexto del Sistema (C4 Nivel 1)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 13px; color: #64748B;&quot;&gt;Modelo de Arquitectura para el Ecosistema de Gestión de Portería, Visitas y Parqueaderos&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="60" y="40" width="850" height="50" as="geometry" />
+        <mxCell id="title_block" value="&lt;b style=&quot;font-size: 22px; color: #0F172A;&quot;&gt;DomoNow Visitor Parking Subsystem - Diagrama de Contexto (C4 Nivel 1)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 13px; color: #64748B;&quot;&gt;Alineado estrictamente a la especificación de negocio (open-spec/specs/visitor-parking/spec.md)&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="950" height="50" as="geometry" />
         </mxCell>
 
-        <!-- ACTORES / PERSONAS -->
-        <!-- 1. Guardia de Porteria -->
-        <mxCell id="actor_guard" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Persona]&lt;br&gt;Guardia de Portería&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Personal de seguridad y control en garita principal. Registra entradas, salidas y autorizaciones vehiculares.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
-          <mxGeometry x="80" y="180" width="200" height="150" as="geometry" />
+        <!-- ACTORES SOPORTADOS EN LA ESPECIFICACION -->
+        <!-- 1. Guardia de Porteria / Operador de Garita -->
+        <mxCell id="actor_guard" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Persona]&lt;br&gt;Guardia de Portería / Operador&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Operador del puesto de control vehicular en garita. Registra ingresos de visitantes con placa sanitizada, realiza checkouts y consulta cupos en tiempo real.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="240" height="170" as="geometry" />
         </mxCell>
 
-        <!-- 2. Residente / Copropietario -->
-        <mxCell id="actor_resident" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Persona]&lt;br&gt;Residente / Propietario&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Habitante de la copropiedad. Pre-autoriza visitantes, consulta disponibilidad y recibe notificaciones.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
-          <mxGeometry x="80" y="390" width="200" height="150" as="geometry" />
+        <!-- 2. Administrador / Supervisor de Copropiedad -->
+        <mxCell id="actor_admin" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Persona]&lt;br&gt;Administrador / Supervisor&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Supervisor de la copropiedad. Monitorea el resumen de asignaciones activas, la tasa de ocupación comunal y la matriz de demanda semanal 24x7.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="240" height="170" as="geometry" />
         </mxCell>
 
-        <!-- 3. Administrador de la Copropiedad -->
-        <mxCell id="actor_admin" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Persona]&lt;br&gt;Administrador de Copropiedad&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Gestiona políticas de cobro, auditoría de ocupación, reportes analíticos y tarifas de parqueadero.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
-          <mxGeometry x="80" y="600" width="200" height="150" as="geometry" />
+        <!-- SISTEMA CENTRAL: DOMONOW VISITOR PARKING SYSTEM -->
+        <mxCell id="system_domonow" value="&lt;div style=&quot;font-weight: bold; font-size: 18px; margin-bottom: 8px;&quot;&gt;[Sistema de Software]&lt;br&gt;DomoNow Visitor Parking Subsystem&lt;/div&gt;&lt;div style=&quot;font-size: 12px; line-height: 1.5; color: #F1F5F9; text-align: left; padding: 0 10px;&quot;&gt;Subsistema de software para copropiedades residenciales que gestiona:&lt;br&gt;• &lt;b&gt;Consulta y Filtrado de 30 Cupos (P-01 a P-30):&lt;/b&gt; Estados Disponible, Ocupado y Fuera de Servicio.&lt;br&gt;• &lt;b&gt;Registro de Ingreso de Visitantes:&lt;/b&gt; Asignación de cupo, normalización de placa (regex ^[A-Z0-9]{5,8}$), registro en UTC.&lt;br&gt;• &lt;b&gt;Salida y Reversión de Cupo (Checkout):&lt;/b&gt; Verificación temporal (ExitTime &gt;= EntryTime) y restauración a Disponible.&lt;br&gt;• &lt;b&gt;Resumen de Asignaciones Activas:&lt;/b&gt; Tiempos transcurridos y unidades de destino.&lt;br&gt;• &lt;b&gt;Control de Alta Concurrencia:&lt;/b&gt; Bloqueo optimista (RowVersion / xmin) y exclusión física de sobreasignación (uq_parking_active_assignment).&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#FFFFFF;align=center;verticalAlign=middle;shadow=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="240" width="560" height="450" as="geometry" />
         </mxCell>
 
-        <!-- 4. Visitante Vehicular -->
-        <mxCell id="actor_visitor" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Persona]&lt;br&gt;Visitante Vehicular&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Conductor que ingresa al conjunto a visitar una unidad residencial temporalmente.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
-          <mxGeometry x="80" y="810" width="200" height="150" as="geometry" />
-        </mxCell>
-
-        <!-- SISTEMA CENTRAL: DOMONOW PLATFORM -->
-        <mxCell id="system_domonow" value="&lt;div style=&quot;font-weight: bold; font-size: 18px; margin-bottom: 8px;&quot;&gt;[Sistema de Software]&lt;br&gt;DomoNow PropTech Platform&lt;/div&gt;&lt;div style=&quot;font-size: 12px; line-height: 1.5; color: #F1F5F9;&quot;&gt;Plataforma integral de control de acceso vehicular, administración de parqueaderos comunales, asignación concurrente en tiempo real, predicción de saturación con Machine Learning y liquidación tarifaria.&lt;br&gt;&lt;br&gt;&lt;b&gt;Arquitectura:&lt;/b&gt; Microfrontends (Single-SPA, Angular 19, Vue 3) + Backend CQRS con Vertical Slice Architecture (.NET 10).&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#FFFFFF;align=center;verticalAlign=middle;shadow=1;arcSize=8;" vertex="1" parent="1">
-          <mxGeometry x="460" y="340" width="380" height="340" as="geometry" />
-        </mxCell>
-
-        <!-- SISTEMAS EXTERNOS -->
-        <!-- 1. Sistema LPR Camaras -->
-        <mxCell id="ext_lpr" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Sistema Externo]&lt;br&gt;Cámaras LPR &amp; Sensores IoT&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Reconocimiento automático de placas vehiculares en carril de desaceleración.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748B;strokeColor=#475569;fontColor=#FFFFFF;align=center;verticalAlign=middle;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="190" width="240" height="130" as="geometry" />
-        </mxCell>
-
-        <!-- 2. Talanqueras y Barreras IoT -->
-        <mxCell id="ext_gates" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Sistema Externo]&lt;br&gt;Barreras Vehiculares IoT&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Controladores físicos de apertura y cierre de talanqueras por relé / protocolo MQTT.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748B;strokeColor=#475569;fontColor=#FFFFFF;align=center;verticalAlign=middle;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="380" width="240" height="130" as="geometry" />
-        </mxCell>
-
-        <!-- 3. Pasarela de Notificaciones -->
-        <mxCell id="ext_notifications" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Sistema Externo]&lt;br&gt;Pasarela de Mensajería&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;WhatsApp Cloud API, SMS y Notificaciones Push (Firebase Cloud Messaging).&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748B;strokeColor=#475569;fontColor=#FFFFFF;align=center;verticalAlign=middle;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="570" width="240" height="130" as="geometry" />
-        </mxCell>
-
-        <!-- 4. Pasarela de Pagos -->
-        <mxCell id="ext_payments" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Sistema Externo]&lt;br&gt;Pasarela de Pagos (Wompi / PSE)&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Procesamiento de pagos electrónicos por fracciones de estacionamiento de visitantes.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748B;strokeColor=#475569;fontColor=#FFFFFF;align=center;verticalAlign=middle;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="760" width="240" height="130" as="geometry" />
-        </mxCell>
-
-        <!-- RELACIONES / CONEXIONES -->
+        <!-- RELACIONES ENTRE ACTORES Y SISTEMA -->
         <!-- Guardia -> DomoNow -->
-        <mxCell id="rel_guard" value="Opera asignaciones en vivo,&lt;br&gt;gestiona checkout y resuelve carreras&lt;br&gt;&lt;b&gt;[HTTPS / WebSockets]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=2;fontColor=#0F172A;" edge="1" parent="1" source="actor_guard" target="system_domonow">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- Residente -> DomoNow -->
-        <mxCell id="rel_resident" value="Pre-autoriza placas y&lt;br&gt;consulta cupos disponibles&lt;br&gt;&lt;b&gt;[HTTPS / REST]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.45;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=2;fontColor=#0F172A;" edge="1" parent="1" source="actor_resident" target="system_domonow">
+        <mxCell id="rel_guard" value="1. Registra ingreso con placa sanitizada (HTTP 201)&lt;br&gt;2. Realiza checkout con reversión a libre (HTTP 200)&lt;br&gt;3. Filtra cupos por estado (Available, Occupied)&lt;br&gt;4. Resuelve carreras concurrentes (HTTP 409)&lt;br&gt;&lt;b&gt;[HTTPS / UI Angular 19 :9001]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=2.5;fontColor=#0F172A;" edge="1" parent="1" source="actor_guard" target="system_domonow">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
         <!-- Admin -> DomoNow -->
-        <mxCell id="rel_admin" value="Consulta analítica predictiva,&lt;br&gt;audita ocupación y configura tarifas&lt;br&gt;&lt;b&gt;[HTTPS]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=2;fontColor=#0F172A;" edge="1" parent="1" source="actor_admin" target="system_domonow">
+        <mxCell id="rel_admin" value="1. Consulta resumen de asignaciones activas&lt;br&gt;2. Monitorea matriz de demanda 24x7 y rotación&lt;br&gt;3. Audita eventos en tiempo real&lt;br&gt;&lt;b&gt;[HTTPS / UI Vue 3 :9002]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=2.5;fontColor=#0F172A;" edge="1" parent="1" source="actor_admin" target="system_domonow">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- Visitante -> DomoNow -->
-        <mxCell id="rel_visitor" value="Paga fracción de parqueadero&lt;br&gt;vía QR de portería&lt;br&gt;&lt;b&gt;[Web Responsive / HTTPS]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.9;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=2;fontColor=#0F172A;" edge="1" parent="1" source="actor_visitor" target="system_domonow">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- DomoNow -> LPR -->
-        <mxCell id="rel_lpr" value="Recibe evento de placa detectada&lt;br&gt;&lt;b&gt;[Webhook / MQTT]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#64748B;strokeWidth=2;dashed=1;fontColor=#0F172A;" edge="1" parent="1" source="system_domonow" target="ext_lpr">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- DomoNow -> Talanqueras -->
-        <mxCell id="rel_gates" value="Ordena apertura al asignar cupo&lt;br&gt;&lt;b&gt;[MQTT / Relay API]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.45;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#64748B;strokeWidth=2;dashed=1;fontColor=#0F172A;" edge="1" parent="1" source="system_domonow" target="ext_gates">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- DomoNow -> Notificaciones -->
-        <mxCell id="rel_notif" value="Envía aviso de llegada al residente&lt;br&gt;&lt;b&gt;[REST / HTTPS]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#64748B;strokeWidth=2;dashed=1;fontColor=#0F172A;" edge="1" parent="1" source="system_domonow" target="ext_notifications">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- DomoNow -> Pagos -->
-        <mxCell id="rel_pay" value="Genera cobro por estadía vehicular&lt;br&gt;&lt;b&gt;[REST / Webhooks]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.9;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#64748B;strokeWidth=2;dashed=1;fontColor=#0F172A;" edge="1" parent="1" source="system_domonow" target="ext_payments">
-          <mxGeometry relative="1" as="geometry" />
+        <!-- CAJA DE ALINEACION CON OPENSPEC -->
+        <mxCell id="box_spec_trace" value="&lt;b&gt;Trazabilidad de Requerimientos OpenSpec (spec.md):&lt;/b&gt;&lt;br&gt;• Req 1: Spot Retrieval &amp; Status Filtering (GET /api/parking-spots?statusFilter=...)&lt;br&gt;• Req 2: Visitor Parking Entry Registration (POST /api/parking-assignments)&lt;br&gt;• Req 3: Parking Spot Checkout &amp; Status Reversion (POST /api/parking-assignments/{id}/checkout)&lt;br&gt;• Req 4: Active Assignments Summary Query (GET /api/parking-assignments/active)&lt;br&gt;• Req 5: High-Concurrency Allocation Control (10 simultaneous requests -&gt; 1 Created, 9 Conflicts)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#C084FC;strokeWidth=1.5;fontColor=#4A1E9E;align=left;verticalAlign=middle;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="520" y="730" width="560" height="120" as="geometry" />
         </mxCell>
 
       </root>
