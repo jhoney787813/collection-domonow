@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DomoNow - Single-SPA Root Orchestrator</title>
+  <title>DomoNow - Control de Acceso y Orquestador</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -16,8 +16,12 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #F8FAFC;
       color: #0F172A;
+      min-height: 100vh;
     }
-    /* Institutional Top Header */
+
+    /* -------------------------------------------------------------
+       1. Institutional Shell Navbar (Visible when Authenticated)
+       ------------------------------------------------------------- */
     .domo-shell-navbar {
       background: #FFFFFF;
       border-bottom: 1px solid #E2E8F0;
@@ -109,7 +113,7 @@
     .shell-right {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
     .property-pill {
       display: flex;
@@ -157,6 +161,7 @@
     .guard-role {
       color: #64748B;
     }
+
     /* Language Switcher Component */
     .lang-switcher-container {
       display: flex;
@@ -195,16 +200,342 @@
       font-size: 0.95rem;
     }
 
+    /* Logout Button in Shell */
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FEF2F2;
+      color: #DC2626;
+      border: 1px solid #FECACA;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .btn-logout:hover {
+      background: #FEE2E2;
+      border-color: #F87171;
+      transform: translateY(-1px);
+    }
+
     /* Mount Areas */
     #single-spa-application\:\@domonow\/angular-parking,
     #single-spa-application\:\@domonow\/vue-analytics {
       min-height: calc(100vh - 68px);
     }
+
+    /* -------------------------------------------------------------
+       2. Dedicated Login Screen (Visible when NOT Authenticated)
+       ------------------------------------------------------------- */
+    .login-view-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at 15% 15%, rgba(108, 53, 222, 0.08) 0%, rgba(248, 250, 252, 1) 70%),
+                  radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.06) 0%, rgba(248, 250, 252, 1) 70%);
+      position: relative;
+    }
+    .login-top-bar {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px -15px rgba(108, 53, 222, 0.12), 0 0 0 1px rgba(226, 232, 240, 0.6);
+      padding: 36px 32px;
+      box-sizing: border-box;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .login-brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .login-brand-header .domo-logo {
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .login-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #0F172A;
+      margin: 0 0 6px 0;
+      letter-spacing: -0.02em;
+    }
+    .login-subtitle {
+      font-size: 0.85rem;
+      color: #64748B;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Demo Credentials Pill */
+    .demo-pill-card {
+      background: #FAF5FF;
+      border: 1.5px dashed #C084FC;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .demo-pill-card:hover {
+      background: #F3E8FF;
+      border-color: #9333EA;
+      transform: translateY(-1px);
+    }
+    .demo-pill-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .demo-badge {
+      background: #7E22CE;
+      color: #FFFFFF;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      letter-spacing: 0.05em;
+    }
+    .demo-hint {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #7E22CE;
+    }
+    .demo-creds-body {
+      font-size: 0.78rem;
+      color: #4A1E9E;
+      display: flex;
+      justify-content: space-between;
+      font-family: monospace;
+      font-weight: 600;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      font-size: 0.95rem;
+      color: #94A3B8;
+      pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      padding: 11px 12px 11px 38px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 10px;
+      background: #FFFFFF;
+      color: #0F172A;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #6C35DE;
+      box-shadow: 0 0 0 3px rgba(108, 53, 222, 0.15);
+    }
+    .btn-toggle-pwd {
+      position: absolute;
+      right: 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: #64748B;
+      padding: 4px;
+    }
+    .btn-toggle-pwd:hover {
+      color: #0F172A;
+    }
+
+    /* Error Alert */
+    .login-error-box {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      color: #B91C1C;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      animation: shake 0.3s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+
+    /* Submit Button */
+    .btn-login-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #6C35DE 0%, #4A1E9E 100%);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(108, 53, 222, 0.3);
+      transition: all 0.2s ease;
+    }
+    .btn-login-submit:hover {
+      background: linear-gradient(135deg, #5B21B6 0%, #3B0764 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(108, 53, 222, 0.4);
+    }
+    .btn-login-submit:active {
+      transform: translateY(0);
+    }
+
+    .security-badge-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.72rem;
+      color: #94A3B8;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
-  <!-- Root Shell Header -->
-  <header class="domo-shell-navbar">
+
+  <!-- -------------------------------------------------------------
+       1. Login Screen (Shown when NOT Authenticated)
+       ------------------------------------------------------------- -->
+  <section id="login-view" class="login-view-container">
+    <div class="login-top-bar">
+      <div class="lang-switcher-container" aria-label="Language Selector">
+        <button id="login-lang-btn-es" class="lang-btn active" title="Español">
+          <span class="flag">🇪🇸</span> <span>ESP</span>
+        </button>
+        <button id="login-lang-btn-en" class="lang-btn" title="English">
+          <span class="flag">🇺🇸</span> <span>ENG</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="login-card">
+      <div class="login-brand-header">
+        <div class="domo-logo">
+          <span class="logo-domo">Domo</span><span class="logo-now">Now</span>
+          <span class="platform-badge">PROPTECH</span>
+        </div>
+        <h1 id="label-login-title" class="login-title">Control de Acceso</h1>
+        <p id="label-login-subtitle" class="login-subtitle">Plataforma de Gestión Integral de Portería & Parqueaderos</p>
+      </div>
+
+      <!-- Quick Demo Credentials Pill -->
+      <div id="demo-creds-box" class="demo-pill-card" title="Clic para autocompletar credenciales demo">
+        <div class="demo-pill-header">
+          <span class="demo-badge">DEMO</span>
+          <span id="label-demo-hint" class="demo-hint">⚡ Clic para autocompletar</span>
+        </div>
+        <div class="demo-creds-body">
+          <span>👤 guardia@domonow.io</span>
+          <span>🔑 DomoNow2026!</span>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form">
+        <div class="form-group">
+          <label id="label-login-email" class="form-label" for="login-email">Usuario / Correo Electrónico</label>
+          <div class="input-wrapper">
+            <span class="input-icon">✉️</span>
+            <input
+              type="email"
+              id="login-email"
+              class="form-input"
+              value="guardia@domonow.io"
+              placeholder="guardia@domonow.io"
+              required
+              autocomplete="username"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label id="label-login-password" class="form-label" for="login-password">Contraseña</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input
+              type="password"
+              id="login-password"
+              class="form-input"
+              value="DomoNow2026!"
+              placeholder="••••••••"
+              required
+              autocomplete="current-password"
+            />
+            <button type="button" id="btn-toggle-pwd" class="btn-toggle-pwd" title="Mostrar/Ocultar contraseña">👁️</button>
+          </div>
+        </div>
+
+        <!-- Error Alert Message -->
+        <div id="login-error-box" class="login-error-box">
+          <span>⚠️</span>
+          <span id="label-login-error">Credenciales incorrectas. Usa guardia@domonow.io y DomoNow2026!</span>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn-login-submit">
+          <span id="label-login-submit">Iniciar Sesión</span>
+          <span>&rarr;</span>
+        </button>
+      </form>
+
+      <div id="label-security-note" class="security-badge-footer">
+        🔒 Acceso restringido y auditado para personal de portería y administración.
+      </div>
+    </div>
+  </section>
+
+  <!-- -------------------------------------------------------------
+       2. Root Shell Header (Shown when Authenticated)
+       ------------------------------------------------------------- -->
+  <header id="domo-shell-navbar" class="domo-shell-navbar" style="display: none;">
     <div class="shell-left">
       <a href="/parking" class="domo-logo">
         <span class="logo-domo">Domo</span><span class="logo-now">Now</span>
@@ -247,6 +578,12 @@
           <span id="label-guard-role" class="guard-role">Guardia de Turno</span>
         </div>
       </div>
+
+      <!-- Logout Button -->
+      <button id="btn-logout" class="btn-logout" title="Cerrar Sesión">
+        <span>🚪</span>
+        <span id="label-logout-text">Cerrar Sesión</span>
+      </button>
     </div>
   </header>
 
