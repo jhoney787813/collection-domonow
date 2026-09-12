@@ -1,0 +1,297 @@
+openapi: 3.1.0
+info:
+  title: DomoNow Visitor Parking API
+  description: Official OpenAPI 3.1 contract for the DomoNow PropTech Visitor Parking Management subsystem (.NET 10 LTS).
+  version: 1.0.0
+  contact:
+    name: DomoNow Architecture Team
+    email: architecture@domonow.com
+
+servers:
+  - url: http://localhost:5000
+    description: Local development backend container / Kestrel
+
+paths:
+  /api/parking-spots:
+    get:
+      summary: Retrieve list of parking spots
+      description: Returns a collection of parking spots (P-01 to P-30) with operational status and active assignment details.
+      operationId: getParkingSpots
+      parameters:
+        - name: statusFilter
+          in: query
+          required: false
+          description: Optional filter by spot status
+          schema:
+            $ref: '#/components/schemas/ParkingSpotStatus'
+      responses:
+        '200':
+          description: Successfully retrieved list of spots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParkingSpotDto'
+
+  /api/parking-assignments:
+    post:
+      summary: Register visitor parking entry
+      description: Allocates an available parking spot to an incoming visitor vehicle, normalizes the license plate, and marks the spot as Occupied.
+      operationId: registerParkingEntry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterParkingEntryRequest'
+      responses:
+        '201':
+          description: Parking entry successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingAssignmentDto'
+        '400':
+          description: Malformed request payload
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Spot is already occupied or concurrent allocation clash occurred
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '422':
+          description: Domain validation failure (e.g. spot out of service or invalid plate format)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /api/parking-assignments/{id}/checkout:
+    put:
+      summary: Register visitor checkout
+      description: Completes an active parking assignment, records UTC exit time, calculates elapsed duration, and automatically reverts the parking spot to Available.
+      operationId: registerParkingCheckout
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the parking assignment
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Checkout successfully registered and spot released
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingAssignmentDto'
+        '400':
+          description: Temporal violation (exit preceding entry) or assignment already completed
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Assignment ID not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /api/parking-assignments/active:
+    get:
+      summary: Retrieve all currently active assignments
+      description: Provides real-time summary of all currently occupied spots, visitor details, and entry timestamps.
+      operationId: getActiveAssignments
+      responses:
+        '200':
+          description: List of currently active assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActiveAssignmentSummaryDto'
+
+components:
+  schemas:
+    ParkingSpotStatus:
+      type: string
+      enum:
+        - Available
+        - Occupied
+        - OutOfService
+      description: Current operational state of the parking bay
+
+    ParkingSpotDto:
+      type: object
+      required:
+        - id
+        - spotNumber
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+        spotNumber:
+          type: string
+          example: 'P-15'
+        status:
+          $ref: '#/components/schemas/ParkingSpotStatus'
+        currentAssignment:
+          $ref: '#/components/schemas/ActiveAssignmentSummaryDto'
+          nullable: true
+
+    RegisterParkingEntryRequest:
+      type: object
+      required:
+        - parkingSpotId
+        - licensePlate
+        - visitorName
+        - destinationUnit
+      properties:
+        parkingSpotId:
+          type: string
+          format: uuid
+          example: '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+        licensePlate:
+          type: string
+          minLength: 5
+          maxLength: 10
+          example: 'ABC-123'
+        visitorName:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: 'Carlos Mendoza'
+        destinationUnit:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: 'Torre 2 - Apt 402'
+
+    ParkingAssignmentDto:
+      type: object
+      required:
+        - id
+        - parkingSpotId
+        - spotNumber
+        - licensePlate
+        - visitorName
+        - destinationUnit
+        - entryTime
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+        parkingSpotId:
+          type: string
+          format: uuid
+          example: '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+        spotNumber:
+          type: string
+          example: 'P-15'
+        licensePlate:
+          type: string
+          example: 'ABC123'
+        visitorName:
+          type: string
+          example: 'Carlos Mendoza'
+        destinationUnit:
+          type: string
+          example: 'Torre 2 - Apt 402'
+        entryTime:
+          type: string
+          format: date-time
+          example: '2026-09-12T14:30:00Z'
+        exitTime:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2026-09-12T16:45:00Z'
+        durationMinutes:
+          type: integer
+          nullable: true
+          example: 135
+        status:
+          type: string
+          enum:
+            - Active
+            - Completed
+            - Cancelled
+          example: 'Active'
+
+    ActiveAssignmentSummaryDto:
+      type: object
+      required:
+        - id
+        - parkingSpotId
+        - spotNumber
+        - licensePlate
+        - visitorName
+        - destinationUnit
+        - entryTime
+      properties:
+        id:
+          type: string
+          format: uuid
+        parkingSpotId:
+          type: string
+          format: uuid
+        spotNumber:
+          type: string
+          example: 'P-15'
+        licensePlate:
+          type: string
+          example: 'ABC123'
+        visitorName:
+          type: string
+          example: 'Carlos Mendoza'
+        destinationUnit:
+          type: string
+          example: 'Torre 2 - Apt 402'
+        entryTime:
+          type: string
+          format: date-time
+          example: '2026-09-12T14:30:00Z'
+        elapsedMinutes:
+          type: integer
+          example: 45
+
+    ProblemDetails:
+      type: object
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          example: 'https://tools.ietf.org/html/rfc7807'
+        title:
+          type: string
+          example: 'Parking spot is already occupied.'
+        status:
+          type: integer
+          example: 409
+        detail:
+          type: string
+          example: 'Spot P-15 currently has an active assignment with vehicle ABC123.'
+        instance:
+          type: string
+          example: '/api/parking-assignments'
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string

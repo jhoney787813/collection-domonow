@@ -1,0 +1,32 @@
+# Antigravity Agent Rules - DomoNow Visitor Parking System
+version: "1.0"
+metadata:
+  system: DomoNow PropTech Platform
+  subsystem: Visitor Parking Management
+  author: Jhon Edison Hincapié García
+
+rules:
+  architectural_integrity:
+    - rule: "Domain layer must have ZERO external dependencies (pure C# 14)."
+    - rule: "Never use anemic domain models; encapsulate state transitions inside Aggregate Roots (ParkingSpot, ParkingAssignment)."
+    - rule: "Enforce single active assignment at aggregate root level and database partial unique index."
+    - rule: "Always sanitize license plate input via LicensePlate Value Object with regex ^[A-Z0-9]{5,8}$."
+    - rule: "Enforce temporal invariant ExitTime >= EntryTime inside entity methods."
+
+  concurrency_and_data:
+    - rule: "Configure optimistic concurrency using PostgreSQL xmin system column in EF Core 10."
+    - rule: "Database migrations must include partial unique index `uq_parking_active_assignment` WHERE status = 1."
+    - rule: "Simultaneous allocation race conditions must return HTTP 409 Conflict."
+
+  frontend_microfrontends:
+    - rule: "Maintain complete decoupling between Angular 19 and Vue 3 MFEs using browser CustomEvents."
+    - rule: "Strictly adhere to DomoNow visual design tokens: brand purple #6C35DE, font Plus Jakarta Sans / Inter."
+    - rule: "Export mandatory Single-SPA lifecycle functions: bootstrap, mount, unmount."
+
+  container_and_environment:
+    - rule: "Target rootless Podman 5.x on macOS Apple Silicon ARM64."
+    - rule: "Ensure all containers have healthy status before downstream dependents start."
+
+  spec_driven_development:
+    - rule: "All code changes must reference an approved OpenSpec specification or change proposal."
+    - rule: "Document every non-trivial AI architectural decision in AI-USAGE.md."

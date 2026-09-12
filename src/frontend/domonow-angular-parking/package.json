@@ -1,0 +1,27 @@
+{
+  "name": "@domonow/angular-parking",
+  "version": "1.0.0",
+  "description": "DomoNow Visitor Parking Operations Microfrontend (Angular 19+)",
+  "scripts": {
+    "start": "vite --port 9001",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0",
+    "@angular/forms": "^19.0.0",
+    "@angular/platform-browser": "^19.0.0",
+    "@angular/platform-browser-dynamic": "^19.0.0",
+    "@angular/router": "^19.0.0",
+    "@domonow/ui-tokens": "file:../domonow-ui-tokens",
+    "rxjs": "^7.8.1",
+    "single-spa": "^6.0.3",
+    "single-spa-angular": "^9.1.0",
+    "zone.js": "^0.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0"
+  }
+}

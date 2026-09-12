@@ -1,0 +1,166 @@
+/* ==========================================================================
+   DOMONOW DESIGN SYSTEM - BRAND CSS TOKENS
+   Specification: open-spec/05-design-tokens.json
+   Brand Core: #6C35DE | Plus Jakarta Sans / Inter
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* --- Brand Core --- */
+  --domo-primary: #6C35DE;
+  --domo-primary-hover: #5825C6;
+  --domo-primary-dark: #4A1E9E;
+  --domo-primary-light: #F3E8FF;
+  --domo-lavender-subtle: #EDE9FE;
+  --domo-lavender-canvas: #FAF5FF;
+
+  /* --- Neutrals & Surfaces --- */
+  --domo-neutral-black: #111827;
+  --domo-neutral-carbon: #0F172A;
+  --domo-neutral-secondary: #4B5563;
+  --domo-neutral-muted: #64748B;
+  --domo-neutral-border: #E2E8F0;
+  --domo-neutral-divider: #E5E7EB;
+  --domo-surface-white: #FFFFFF;
+  --domo-surface-canvas: #F8FAFC;
+  --domo-surface-alt: #F9FAFB;
+
+  /* --- Functional Feedback --- */
+  --domo-status-success: #10B981;
+  --domo-status-whatsapp: #25D366;
+  --domo-status-warning: #F59E0B;
+  --domo-status-danger: #EF4444;
+  --domo-status-occupied: #6C35DE;
+  --domo-status-available: #10B981;
+  --domo-status-outofservice: #94A3B8;
+
+  /* --- Elevations & Geometry --- */
+  --domo-radius-sm: 8px;
+  --domo-radius-md: 12px;
+  --domo-radius-lg: 16px;
+  --domo-radius-full: 9999px;
+  --domo-shadow-card: 0 4px 20px -2px rgba(108, 53, 222, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  --domo-shadow-hover: 0 10px 25px -3px rgba(108, 53, 222, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.05);
+
+  /* --- Typography --- */
+  --domo-font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Base resets & typography */
+body {
+  font-family: var(--domo-font-family);
+  background-color: var(--domo-surface-canvas);
+  color: var(--domo-neutral-carbon);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Card Component Contract */
+.domo-card {
+  background: var(--domo-surface-white);
+  border: 1px solid var(--domo-neutral-border);
+  border-radius: var(--domo-radius-lg);
+  padding: 20px;
+  box-shadow: var(--domo-shadow-card);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.domo-card:hover {
+  box-shadow: var(--domo-shadow-hover);
+  border-color: #DDD6FE;
+}
+
+/* Button Component Contracts */
+.domo-btn-primary {
+  background-color: var(--domo-primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: var(--domo-font-family);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(108, 53, 222, 0.25);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.domo-btn-primary:hover {
+  background-color: var(--domo-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108, 53, 222, 0.35);
+}
+
+.domo-btn-secondary {
+  background-color: transparent;
+  color: var(--domo-neutral-carbon);
+  border: 1.5px solid var(--domo-neutral-border);
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-family: var(--domo-font-family);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.domo-btn-secondary:hover {
+  background-color: var(--domo-primary-light);
+  border-color: #DDD6FE;
+  color: var(--domo-primary-dark);
+}
+
+/* Status Badges Component Contracts */
+.domo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--domo-radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.domo-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.domo-badge-available {
+  background-color: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+.domo-badge-available .domo-badge-dot {
+  background-color: #10B981;
+}
+
+.domo-badge-occupied {
+  background-color: var(--domo-primary-light);
+  color: var(--domo-primary-dark);
+  border: 1px solid #DDD6FE;
+}
+.domo-badge-occupied .domo-badge-dot {
+  background-color: var(--domo-primary);
+}
+
+.domo-badge-outofservice {
+  background-color: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+}
+.domo-badge-outofservice .domo-badge-dot {
+  background-color: #94A3B8;
+}

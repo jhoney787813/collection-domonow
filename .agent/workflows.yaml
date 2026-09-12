@@ -1,0 +1,42 @@
+# Antigravity Agent Workflows - DomoNow Visitor Parking System
+version: "1.0"
+metadata:
+  system: DomoNow PropTech Platform
+  subsystem: Visitor Parking Management
+
+workflows:
+  spec_first_delivery:
+    description: "Standard workflow for delivering features via Spec-Driven Development"
+    steps:
+      - step: 1
+        name: "Propose Change"
+        command: "openspec new change <change-name>"
+        artifact: "proposal.md, specs/<capability>/spec.md, design.md, tasks.md"
+      - step: 2
+        name: "Validate Specification"
+        command: "openspec validate --specs"
+      - step: 3
+        name: "Implement Backend Core"
+        focus: "Domain entities, Value Objects, MediatR handlers, EF Core mappings"
+      - step: 4
+        name: "Implement Microfrontends"
+        focus: "Single-SPA root, Angular 19 grid, Vue 3 analytics"
+      - step: 5
+        name: "Automated Concurrency Testing"
+        command: "dotnet test --filter Category=Concurrency"
+      - step: 6
+        name: "Archive and Record AI Usage"
+        command: "openspec archive <change-name> && update AI-USAGE.md"
+
+  concurrency_validation_workflow:
+    description: "Verification workflow for high-concurrency race conditions"
+    steps:
+      - step: 1
+        name: "Verify PostgreSQL Partial Unique Index"
+        query: "SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'parking_assignments';"
+      - step: 2
+        name: "Run 10-Thread Simulated Allocation Race"
+        test: "DomoNow.Parking.UnitTests.ConcurrencyIntegrationTests.AllocateSpotConcurrently_ShouldOnlyAllowOneSuccess"
+      - step: 3
+        name: "Assert 1 Success and 9 Conflicts"
+        assertion: "Exactly one 201 Created and nine 409 Conflicts"

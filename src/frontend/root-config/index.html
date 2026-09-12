@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DomoNow - Single-SPA Root Orchestrator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../domonow-ui-tokens/styles/domonow-tokens.css" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+    }
+    /* Institutional Top Header */
+    .domo-shell-navbar {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 0 28px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+    .shell-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .domo-logo {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .logo-domo {
+      color: #6C35DE;
+    }
+    .logo-now {
+      color: #0F172A;
+    }
+    .platform-badge {
+      background: #FAF5FF;
+      color: #6C35DE;
+      border: 1px solid #DDD6FE;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      margin-left: 4px;
+    }
+    /* Subproject Switcher Tabs */
+    .subproject-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #4B5563;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+    }
+    .nav-tab:hover {
+      color: #6C35DE;
+      background: #F3E8FF;
+    }
+    .nav-tab.active {
+      background: #F3E8FF;
+      color: #4A1E9E;
+      border-color: #DDD6FE;
+    }
+    .tab-badge {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+    .badge-angular {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+    .badge-vue {
+      background: #DCFCE7;
+      color: #16A34A;
+    }
+    /* Shell Right Info */
+    .shell-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .property-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #F1F5F9;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #334155;
+    }
+    .property-dot {
+      width: 8px;
+      height: 8px;
+      background: #10B981;
+      border-radius: 50%;
+    }
+    .guard-avatar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .avatar-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6C35DE 0%, #4A1E9E 100%);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+    .guard-info {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.78rem;
+    }
+    .guard-name {
+      font-weight: 700;
+      color: #0F172A;
+    }
+    .guard-role {
+      color: #64748B;
+    }
+
+    /* Mount Areas */
+    #single-spa-application\:\@domonow\/angular-parking,
+    #single-spa-application\:\@domonow\/vue-analytics {
+      min-height: calc(100vh - 68px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Root Shell Header -->
+  <header class="domo-shell-navbar">
+    <div class="shell-left">
+      <a href="/parking" class="domo-logo">
+        <span class="logo-domo">Domo</span><span class="logo-now">Now</span>
+        <span class="platform-badge">PROPTECH</span>
+      </a>
+
+      <!-- Subproject Visual Switcher -->
+      <nav class="subproject-nav">
+        <a id="tab-parking" href="/parking" class="nav-tab active">
+          <span>🚗 Operaciones de Parqueadero</span>
+          <span class="tab-badge badge-angular">Angular 19</span>
+        </a>
+        <a id="tab-analytics" href="/analytics" class="nav-tab">
+          <span>📈 Analítica & Demanda Predictiva</span>
+          <span class="tab-badge badge-vue">Vue 3</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="shell-right">
+      <div class="property-pill">
+        <span class="property-dot"></span>
+        <span>Condominio Altos de la Pradera - Torre 1 & 2</span>
+      </div>
+
+      <div class="guard-avatar">
+        <div class="avatar-circle">P1</div>
+        <div class="guard-info">
+          <span class="guard-name">Portería Principal</span>
+          <span class="guard-role">Guardia de Turno</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mount Container for MFE 1 (Angular 19 Operations) -->
+  <main id="single-spa-application:@domonow/angular-parking"></main>
+
+  <!-- Mount Container for MFE 2 (Vue 3 Analytics) -->
+  <main id="single-spa-application:@domonow/vue-analytics"></main>
+
+  <script type="module" src="/src/domonow-root-config.ts"></script>
+</body>
+</html>

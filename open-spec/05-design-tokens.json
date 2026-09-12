@@ -1,0 +1,81 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "name": "DomoNow Design Tokens",
+  "version": "1.0.0",
+  "color": {
+    "brand": {
+      "primary": { "value": "#6C35DE", "type": "color" },
+      "primary-hover": { "value": "#5825C6", "type": "color" },
+      "primary-dark": { "value": "#4A1E9E", "type": "color" },
+      "primary-light": { "value": "#F3E8FF", "type": "color" },
+      "lavender-subtle": { "value": "#EDE9FE", "type": "color" },
+      "lavender-canvas": { "value": "#FAF5FF", "type": "color" }
+    },
+    "neutral": {
+      "black": { "value": "#111827", "type": "color" },
+      "carbon": { "value": "#0F172A", "type": "color" },
+      "secondary": { "value": "#4B5563", "type": "color" },
+      "muted": { "value": "#64748B", "type": "color" },
+      "border": { "value": "#E2E8F0", "type": "color" },
+      "divider": { "value": "#E5E7EB", "type": "color" }
+    },
+    "surface": {
+      "white": { "value": "#FFFFFF", "type": "color" },
+      "canvas": { "value": "#F8FAFC", "type": "color" },
+      "alt": { "value": "#F9FAFB", "type": "color" }
+    },
+    "status": {
+      "success": { "value": "#10B981", "type": "color" },
+      "whatsapp": { "value": "#25D366", "type": "color" },
+      "warning": { "value": "#F59E0B", "type": "color" },
+      "danger": { "value": "#EF4444", "type": "color" },
+      "available": { "value": "#10B981", "type": "color" },
+      "occupied": { "value": "#6C35DE", "type": "color" },
+      "outofservice": { "value": "#94A3B8", "type": "color" }
+    },
+    "badge": {
+      "available": {
+        "background": { "value": "#ECFDF5", "type": "color" },
+        "text": { "value": "#065F46", "type": "color" },
+        "border": { "value": "#A7F3D0", "type": "color" },
+        "dot": { "value": "#10B981", "type": "color" }
+      },
+      "occupied": {
+        "background": { "value": "#F3E8FF", "type": "color" },
+        "text": { "value": "#4A1E9E", "type": "color" },
+        "border": { "value": "#DDD6FE", "type": "color" },
+        "dot": { "value": "#6C35DE", "type": "color" }
+      },
+      "outOfService": {
+        "background": { "value": "#F1F5F9", "type": "color" },
+        "text": { "value": "#475569", "type": "color" },
+        "border": { "value": "#CBD5E1", "type": "color" },
+        "dot": { "value": "#94A3B8", "type": "color" }
+      }
+    }
+  },
+  "borderRadius": {
+    "sm": { "value": "8px", "type": "dimension" },
+    "md": { "value": "12px", "type": "dimension" },
+    "lg": { "value": "16px", "type": "dimension" },
+    "full": { "value": "9999px", "type": "dimension" }
+  },
+  "boxShadow": {
+    "card": {
+      "value": "0 4px 20px -2px rgba(108, 53, 222, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04)",
+      "type": "shadow"
+    },
+    "hover": {
+      "value": "0 10px 25px -3px rgba(108, 53, 222, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.05)",
+      "type": "shadow"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "primary": {
+        "value": "'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+        "type": "fontFamily"
+      }
+    }
+  }
+}

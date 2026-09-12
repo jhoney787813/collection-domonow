@@ -1,0 +1,22 @@
+{
+  "name": "@domonow/vue-analytics",
+  "version": "1.0.0",
+  "description": "DomoNow Visitor Parking Analytics & Predictive Demand Microfrontend (Vue 3 + Vite)",
+  "scripts": {
+    "start": "vite --port 9002",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@domonow/ui-tokens": "file:../domonow-ui-tokens",
+    "pinia": "^2.2.8",
+    "single-spa": "^6.0.3",
+    "single-spa-vue": "^3.0.0",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.7",
+    "vue-tsc": "^2.2.0"
+  }
+}

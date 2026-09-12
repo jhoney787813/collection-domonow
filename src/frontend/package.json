@@ -1,0 +1,11 @@
+{
+  "name": "domonow-frontend-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DomoNow Visitor Parking Microfrontends Monorepo",
+  "scripts": {
+    "start:root": "npm --prefix root-config run start",
+    "start:angular": "npm --prefix domonow-angular-parking run start",
+    "start:vue": "npm --prefix domonow-vue-analytics run start"
+  }
+}

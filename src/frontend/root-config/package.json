@@ -1,0 +1,19 @@
+{
+  "name": "@domonow/root-config",
+  "version": "1.0.0",
+  "description": "DomoNow Single-SPA Root Shell Orchestrator (Port 9000)",
+  "scripts": {
+    "start": "vite --port 9000",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@domonow/ui-tokens": "file:../domonow-ui-tokens",
+    "single-spa": "^6.0.3",
+    "systemjs": "^6.15.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.7"
+  }
+}

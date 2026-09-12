@@ -1,0 +1,24 @@
+{
+  "name": "@domonow/ui-tokens",
+  "version": "1.0.0",
+  "description": "DomoNow PropTech Shared Design Tokens & Styles",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "style": "styles/domonow-tokens.css",
+  "files": [
+    "dist",
+    "styles"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "domonow",
+    "design-tokens",
+    "microfrontends",
+    "single-spa"
+  ],
+  "author": "DomoNow Architecture Team",
+  "license": "UNLICENSED"
+}

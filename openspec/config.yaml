@@ -1,0 +1,43 @@
+schema: spec-driven
+
+# Project context
+# Shown to AI agents when planning and creating artifacts.
+context: |
+  Project: DomoNow PropTech Platform - Visitor Parking Management Subsystem
+  Platform: macOS 26.6.2 (Darwin Kernel 25G83, Apple Silicon ARM64)
+  Container Runtime: Podman 5.x / Podman Compose (socket: unix:///Users/$USER/.local/share/containers/podman/machine/podman.sock)
+  Backend: .NET 10 LTS, C# 14, ASP.NET Core Web API, Entity Framework Core 10 (Clean Architecture, CQRS)
+  Database: PostgreSQL 17 Alpine on Podman, explicit isolation, advisory locks, partial unique index `uq_parking_active_assignment`
+  Frontend: Single-SPA Microfrontends Monorepo:
+    - Root Orchestrator: HTML5 / Vanilla TS (@single-spa/layout, SystemJS, Import Maps) - Port 9000
+    - Operations MFE: Angular 19+ (Standalone Components, Signals, OnPush) - Port 9001
+    - Analytics MFE: Vue.js 3+ (Composition API, Pinia, Vite) - Port 9002
+    - Design System: DomoNow Brand Tokens (--domo-primary: #6C35DE, Plus Jakarta Sans / Inter)
+  Testing: xUnit, FluentAssertions, Concurrency Integration Tests (10 simultaneous allocation requests)
+
+# Per-artifact rules
+rules:
+  proposal:
+    - Focus strictly on the visitor parking domain and clear business justification.
+    - Explicitly state impact on Single-SPA microfrontends and .NET 10 backend contracts.
+    - Document compliance with PostgreSQL partial index and optimistic concurrency.
+  specs:
+    - Define precise normative requirements using SHALL / MUST with exact #### Scenario: blocks.
+    - Specify observable behaviors for spot assignment, occupancy validation, checkout reversion, and plate sanitization.
+    - Always include scenarios for concurrency conflicts (HTTP 409) and validation failures (HTTP 422).
+  design:
+    - Adhere strictly to Clean Architecture layer separation (Domain, Application, Infrastructure, Api).
+    - Maintain DomoNow Design System color tokens and Single-SPA event bus decoupling.
+  tasks:
+    - Organize tasks logically by backend layers first, followed by microfrontends, containerization, and automated tests.
+
+# Per-operation guidance
+operations:
+  apply:
+    guidance:
+      - Always verify unit tests and concurrency integration tests pass before completing tasks.
+      - Log all critical architectural and AI-guided decisions into AI-USAGE.md.
+  archive:
+    guidance:
+      - Synchronize main specifications in open-spec/ and openspec/specs/.
+      - Document resolution of concurrency, DDD encapsulation, and microfrontend routing.
