@@ -6,11 +6,19 @@ import { ParkingGridComponent } from './components/parking-grid.component';
 import { EntryModalComponent } from './components/entry-modal.component';
 import { CheckoutModalComponent } from './components/checkout-modal.component';
 import { CustomDialogComponent } from './components/custom-dialog.component';
+import { EmptyStateComponent } from './components/empty-state.component';
 
 @Component({
   selector: 'app-domonow-angular-parking',
   standalone: true,
-  imports: [CommonModule, ParkingGridComponent, EntryModalComponent, CheckoutModalComponent, CustomDialogComponent],
+  imports: [
+    CommonModule,
+    ParkingGridComponent,
+    EntryModalComponent,
+    CheckoutModalComponent,
+    CustomDialogComponent,
+    EmptyStateComponent
+  ],
   template: `
     <div class="mfe-container">
       <!-- Subproject Visual Header -->
@@ -48,70 +56,100 @@ import { CustomDialogComponent } from './components/custom-dialog.component';
         <span class="alert-text">{{ state.concurrencyNotice() }}</span>
       </div>
 
-      <!-- KPI Summary Cards -->
-      <div class="kpi-grid">
-        <div class="kpi-card total">
-          <span class="kpi-title">{{ i18n.t().kpiTotalSpots }}</span>
-          <span class="kpi-value">{{ state.stats().totalSpots }}</span>
-          <span class="kpi-tag">{{ i18n.t().kpiMaxCapacity }}</span>
+      <!-- INLINE ERROR STATE (Replacing components when API fails) -->
+      <app-empty-state
+        *ngIf="state.loadError() as err"
+        type="error"
+        badgeText="ERROR DE COMUNICACIÓN API .NET 10"
+        [title]="err.title"
+        [message]="err.message"
+        [detail]="err.detail"
+        [statusCode]="err.statusCode"
+        actionText="🔄 Reintentar Conexión con Servidor"
+        [isLoading]="state.isLoading()"
+        (onRetry)="state.loadSpots()"
+      ></app-empty-state>
+
+      <!-- INLINE EMPTY STATE (Replacing components when DB has 0 spots) -->
+      <app-empty-state
+        *ngIf="!state.isLoading() && !state.loadError() && state.spots().length === 0"
+        type="empty"
+        badgeText="BASE DE DATOS SIN CUPOS"
+        title="No hay cupos de parqueadero registrados"
+        message="La base de datos de DomoNow no contiene registros de bahías para visitantes en este momento."
+        detail="Endpoint consultado: GET http://localhost:5050/api/parking-spots (Respuesta: 0 elementos)"
+        actionText="🔄 Recargar Información"
+        [isLoading]="state.isLoading()"
+        (onRetry)="state.loadSpots()"
+      ></app-empty-state>
+
+      <!-- MAIN OPERATIONAL UI (Rendered only when data is loaded) -->
+      <ng-container *ngIf="!state.loadError() && state.spots().length > 0">
+        <!-- KPI Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card total">
+            <span class="kpi-title">{{ i18n.t().kpiTotalSpots }}</span>
+            <span class="kpi-value">{{ state.stats().totalSpots }}</span>
+            <span class="kpi-tag">{{ i18n.t().kpiMaxCapacity }}</span>
+          </div>
+
+          <div class="kpi-card available">
+            <span class="kpi-title">{{ i18n.t().kpiAvailable }}</span>
+            <span class="kpi-value">{{ state.stats().availableSpots }}</span>
+            <span class="kpi-tag available-tag">{{ i18n.t().kpiReadyToAssign }}</span>
+          </div>
+
+          <div class="kpi-card occupied">
+            <span class="kpi-title">{{ i18n.t().kpiOccupied }}</span>
+            <span class="kpi-value">{{ state.stats().occupiedSpots }}</span>
+            <span class="kpi-tag occupied-tag">{{ state.stats().occupancyPercentage }}{{ i18n.t().kpiOccupancyRate }}</span>
+          </div>
+
+          <div class="kpi-card out">
+            <span class="kpi-title">{{ i18n.t().kpiOutOfService }}</span>
+            <span class="kpi-value">{{ state.stats().outOfServiceSpots }}</span>
+            <span class="kpi-tag out-tag">{{ i18n.t().kpiMaintenance }}</span>
+          </div>
         </div>
 
-        <div class="kpi-card available">
-          <span class="kpi-title">{{ i18n.t().kpiAvailable }}</span>
-          <span class="kpi-value">{{ state.stats().availableSpots }}</span>
-          <span class="kpi-tag available-tag">{{ i18n.t().kpiReadyToAssign }}</span>
+        <!-- Controls & Filter Toolbar -->
+        <div class="toolbar">
+          <div class="filter-group">
+            <span class="filter-label">{{ i18n.t().filterLabel }}</span>
+            <button
+              class="filter-chip"
+              [class.active]="state.selectedFilter() === 'ALL'"
+              (click)="state.setFilter('ALL')"
+            >
+              {{ i18n.t().filterAll }} ({{ state.stats().totalSpots }})
+            </button>
+            <button
+              class="filter-chip chip-available"
+              [class.active]="state.selectedFilter() === 'Available'"
+              (click)="state.setFilter('Available')"
+            >
+              {{ i18n.t().statusAvailable }} ({{ state.stats().availableSpots }})
+            </button>
+            <button
+              class="filter-chip chip-occupied"
+              [class.active]="state.selectedFilter() === 'Occupied'"
+              (click)="state.setFilter('Occupied')"
+            >
+              {{ i18n.t().statusOccupied }} ({{ state.stats().occupiedSpots }})
+            </button>
+            <button
+              class="filter-chip chip-out"
+              [class.active]="state.selectedFilter() === 'OutOfService'"
+              (click)="state.setFilter('OutOfService')"
+            >
+              {{ i18n.t().statusOutOfService }} ({{ state.stats().outOfServiceSpots }})
+            </button>
+          </div>
         </div>
 
-        <div class="kpi-card occupied">
-          <span class="kpi-title">{{ i18n.t().kpiOccupied }}</span>
-          <span class="kpi-value">{{ state.stats().occupiedSpots }}</span>
-          <span class="kpi-tag occupied-tag">{{ state.stats().occupancyPercentage }}{{ i18n.t().kpiOccupancyRate }}</span>
-        </div>
-
-        <div class="kpi-card out">
-          <span class="kpi-title">{{ i18n.t().kpiOutOfService }}</span>
-          <span class="kpi-value">{{ state.stats().outOfServiceSpots }}</span>
-          <span class="kpi-tag out-tag">{{ i18n.t().kpiMaintenance }}</span>
-        </div>
-      </div>
-
-      <!-- Controls & Filter Toolbar -->
-      <div class="toolbar">
-        <div class="filter-group">
-          <span class="filter-label">{{ i18n.t().filterLabel }}</span>
-          <button
-            class="filter-chip"
-            [class.active]="state.selectedFilter() === 'ALL'"
-            (click)="state.setFilter('ALL')"
-          >
-            {{ i18n.t().filterAll }} ({{ state.stats().totalSpots }})
-          </button>
-          <button
-            class="filter-chip chip-available"
-            [class.active]="state.selectedFilter() === 'Available'"
-            (click)="state.setFilter('Available')"
-          >
-            {{ i18n.t().statusAvailable }} ({{ state.stats().availableSpots }})
-          </button>
-          <button
-            class="filter-chip chip-occupied"
-            [class.active]="state.selectedFilter() === 'Occupied'"
-            (click)="state.setFilter('Occupied')"
-          >
-            {{ i18n.t().statusOccupied }} ({{ state.stats().occupiedSpots }})
-          </button>
-          <button
-            class="filter-chip chip-out"
-            [class.active]="state.selectedFilter() === 'OutOfService'"
-            (click)="state.setFilter('OutOfService')"
-          >
-            {{ i18n.t().statusOutOfService }} ({{ state.stats().outOfServiceSpots }})
-          </button>
-        </div>
-      </div>
-
-      <!-- 30-Spot Grid -->
-      <app-parking-grid></app-parking-grid>
+        <!-- 30-Spot Grid -->
+        <app-parking-grid></app-parking-grid>
+      </ng-container>
 
       <!-- Interactive Modals -->
       <app-entry-modal></app-entry-modal>

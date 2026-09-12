@@ -15,6 +15,7 @@ export class ParkingStateService {
   private readonly _concurrencyNotice = signal<string | null>(null);
   private readonly _activeDialog = signal<DialogData | null>(null);
   private readonly _isLoading = signal<boolean>(false);
+  private readonly _loadError = signal<{ title: string; message: string; detail?: string; statusCode?: number } | null>(null);
 
   // Read-only Signal selectors
   readonly spots = this._spots.asReadonly();
@@ -24,6 +25,7 @@ export class ParkingStateService {
   readonly concurrencyNotice = this._concurrencyNotice.asReadonly();
   readonly activeDialog = this._activeDialog.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
+  readonly loadError = this._loadError.asReadonly();
 
   // Computed Selectors
   readonly filteredSpots = computed(() => {
@@ -90,6 +92,7 @@ export class ParkingStateService {
    */
   async loadSpots(): Promise<void> {
     this._isLoading.set(true);
+    this._loadError.set(null);
     try {
       const res = await fetch(`${this.API_BASE}/parking-spots`);
       if (!res.ok) {
@@ -125,16 +128,15 @@ export class ParkingStateService {
       });
 
       this._spots.set(mapped);
+      this._loadError.set(null);
     } catch (err: any) {
       console.error('[ParkingService] Error fetching spots:', err);
-      this.openDialog({
-        title: 'Error de Conexión',
-        message: 'No fue posible cargar los cupos desde la API .NET 10 (http://localhost:5050/api).',
-        type: 'error',
-        statusCode: 500,
-        detail: err.message,
-        confirmText: 'Reintentar',
-        onConfirm: () => this.loadSpots()
+      this._spots.set([]);
+      this._loadError.set({
+        title: 'Error de Comunicación con el Servidor',
+        message: 'No fue posible cargar los cupos de parqueadero desde la API .NET 10 (http://localhost:5050/api).',
+        detail: err.message || 'Verifique que el backend y la base de datos PostgreSQL estén activos en los puertos 5050 y 5432.',
+        statusCode: 500
       });
     } finally {
       this._isLoading.set(false);

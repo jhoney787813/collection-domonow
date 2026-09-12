@@ -34,6 +34,20 @@ onMounted(() => {
       </div>
     </header>
 
+    <!-- Offline / API Error Strip -->
+    <div v-if="store.apiError" class="offline-strip">
+      <div class="strip-left">
+        <span class="strip-icon">⚠️</span>
+        <div class="strip-texts">
+          <strong>{{ store.currentLang === 'en' ? 'Backend Service Offline:' : 'Servidor API .NET 10 Fuera de Línea:' }}</strong>
+          <span>{{ store.apiError.message }}</span>
+        </div>
+      </div>
+      <button class="strip-btn" @click="store.fetchAnalyticsData()">
+        🔄 {{ store.currentLang === 'en' ? 'Re-sync API' : 'Reintentar Sincronización' }}
+      </button>
+    </div>
+
     <!-- Top KPI Row -->
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -168,5 +182,51 @@ onMounted(() => {
 }
 .ml-tag {
   color: #6C35DE;
+}
+.offline-strip {
+  background: #FEF2F2;
+  border: 1.5px solid #FCA5A5;
+  border-radius: 14px;
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  animation: slideDown 0.3s ease-out;
+}
+.strip-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.strip-icon {
+  font-size: 20px;
+}
+.strip-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.88rem;
+  color: #991B1B;
+}
+.strip-btn {
+  background: #DC2626;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.strip-btn:hover {
+  background: #B91C1C;
+}
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 </style>

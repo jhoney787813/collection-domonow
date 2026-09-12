@@ -147,6 +147,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // Active Assignments from API
   const activeAssignments = ref<ActiveAssignmentDto[]>([]);
   const isLoadingAssignments = ref(false);
+  const apiError = ref<{ title: string; message: string; detail?: string; statusCode?: number } | null>(null);
 
   // Dialog State
   const activeDialog = ref<DialogData | null>(null);
@@ -190,6 +191,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
    */
   async function fetchAnalyticsData() {
     isLoadingAssignments.value = true;
+    apiError.value = null;
     try {
       const [resAssignments, resSpots] = await Promise.all([
         fetch(`${API_BASE}/parking-assignments/active`),
@@ -233,17 +235,17 @@ export const useAnalyticsStore = defineStore('analytics', () => {
           timestamp: a.entryTime
         }));
       }
+
+      apiError.value = null;
     } catch (err: any) {
       console.error('[AnalyticsStore] Failed to fetch live data:', err);
-      openDialog({
-        title: 'Error de Sincronización',
-        message: 'No fue posible consultar los datos en tiempo real desde http://localhost:5050/api.',
-        type: 'error',
-        statusCode: 500,
-        detail: err.message,
-        confirmText: 'Reintentar',
-        onConfirm: () => fetchAnalyticsData()
-      });
+      activeAssignments.value = [];
+      apiError.value = {
+        title: 'Error de Comunicación con API .NET 10',
+        message: 'No fue posible sincronizar las asignaciones activas ni las métricas desde el servidor.',
+        detail: err.message || 'Verifique que el backend esté accesible en http://localhost:5050/api.',
+        statusCode: 500
+      };
     } finally {
       isLoadingAssignments.value = false;
     }
@@ -319,6 +321,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     predictedNextHourSurge,
     activeAssignments,
     isLoadingAssignments,
+    apiError,
     activeDialog,
     openDialog,
     closeDialog,

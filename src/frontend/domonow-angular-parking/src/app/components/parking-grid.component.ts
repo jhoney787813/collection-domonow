@@ -2,13 +2,24 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParkingStateService } from '../services/parking.service';
 import { I18nService } from '../services/i18n.service';
+import { EmptyStateComponent } from './empty-state.component';
 
 @Component({
   selector: 'app-parking-grid',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EmptyStateComponent],
   template: `
-    <div class="grid-container">
+    <app-empty-state
+      *ngIf="state.filteredSpots().length === 0"
+      type="filter"
+      badgeText="FILTRO SIN COINCIDENCIAS"
+      title="No se encontraron cupos en esta categoría"
+      [message]="'No hay ningún cupo con estado \\'' + formatStatus(state.selectedFilter()) + '\\' actualmente.'"
+      actionText="Ver Todos los Cupos"
+      (onRetry)="state.setFilter('ALL')"
+    ></app-empty-state>
+
+    <div class="grid-container" *ngIf="state.filteredSpots().length > 0">
       <div
         *ngFor="let spot of state.filteredSpots()"
         class="spot-card"
