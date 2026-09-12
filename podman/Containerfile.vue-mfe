@@ -1,0 +1,26 @@
+# ==============================================================================
+# DomoNow PropTech Platform - Vue 3 Analytics & Predictive Demand MFE (Containerfile)
+# Port: 9002 | Architecture: ARM64 Apple Silicon & x86_64
+# ==============================================================================
+
+FROM node:22-alpine
+
+WORKDIR /app
+
+# 1. Copy shared design tokens
+COPY src/frontend/domonow-ui-tokens ./src/frontend/domonow-ui-tokens
+
+# 2. Copy Vue MFE package manifests and install dependencies
+COPY src/frontend/domonow-vue-analytics/package*.json ./src/frontend/domonow-vue-analytics/
+WORKDIR /app/src/frontend/domonow-vue-analytics
+RUN npm install
+
+# 3. Copy source files
+COPY src/frontend/domonow-vue-analytics ./
+
+EXPOSE 9002
+
+ENV HOST=0.0.0.0
+ENV PORT=9002
+
+CMD ["npx", "vite", "--host", "0.0.0.0", "--port", "9002"]

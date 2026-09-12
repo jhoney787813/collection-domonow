@@ -43,23 +43,35 @@ document.addEventListener('click', (e) => {
  */
 registerApplication({
   name: '@domonow/angular-parking',
-  app: async () => {
-    try {
-      // Attempt to load from Port 9001 if running as separate server
-      // or fall back to local direct import
-      return await import('../../domonow-angular-parking/src/main.single-spa');
-    } catch (err) {
-      console.warn('[Root Config] Could not dynamically load angular parking MFE, fallback:', err);
-      return {
-        bootstrap: async () => {},
-        mount: async () => {
-          const el = document.getElementById('single-spa-application:@domonow/angular-parking');
-          if (el) el.innerHTML = '<div style="padding: 40px; text-align: center;">Cargando MFE de Operaciones en puerto 9001...</div>';
-        },
-        unmount: async () => {}
-      };
+  app: async () => ({
+    bootstrap: async () => {
+      console.log('[Root Config] Bootstrapping Angular Operations MFE (Port 9001)...');
+    },
+    mount: async () => {
+      console.log('[Root Config] Mounting Angular Operations MFE...');
+      const container = document.getElementById('single-spa-application:@domonow/angular-parking');
+      if (container) {
+        container.style.display = 'block';
+        if (!container.querySelector('iframe')) {
+          container.innerHTML = `
+            <iframe
+              id="iframe-angular-parking"
+              src="http://localhost:9001"
+              style="width: 100%; height: calc(100vh - 68px); border: none; display: block;"
+              title="DomoNow Angular Parking Operations"
+            ></iframe>
+          `;
+        }
+      }
+    },
+    unmount: async () => {
+      console.log('[Root Config] Unmounting Angular Operations MFE...');
+      const container = document.getElementById('single-spa-application:@domonow/angular-parking');
+      if (container) {
+        container.style.display = 'none';
+      }
     }
-  },
+  }),
   activeWhen: (location) => location.pathname === '/' || location.pathname.startsWith('/parking')
 });
 
@@ -69,23 +81,35 @@ registerApplication({
  */
 registerApplication({
   name: '@domonow/vue-analytics',
-  app: async () => {
-    try {
-      // Attempt to load from Port 9002 if running as separate server
-      // or fall back to local direct import
-      return await import('../../domonow-vue-analytics/src/main');
-    } catch (err) {
-      console.warn('[Root Config] Could not dynamically load vue analytics MFE, fallback:', err);
-      return {
-        bootstrap: async () => {},
-        mount: async () => {
-          const el = document.getElementById('single-spa-application:@domonow/vue-analytics');
-          if (el) el.innerHTML = '<div style="padding: 40px; text-align: center;">Cargando MFE de Analítica en puerto 9002...</div>';
-        },
-        unmount: async () => {}
-      };
+  app: async () => ({
+    bootstrap: async () => {
+      console.log('[Root Config] Bootstrapping Vue Analytics MFE (Port 9002)...');
+    },
+    mount: async () => {
+      console.log('[Root Config] Mounting Vue Analytics MFE...');
+      const container = document.getElementById('single-spa-application:@domonow/vue-analytics');
+      if (container) {
+        container.style.display = 'block';
+        if (!container.querySelector('iframe')) {
+          container.innerHTML = `
+            <iframe
+              id="iframe-vue-analytics"
+              src="http://localhost:9002"
+              style="width: 100%; height: calc(100vh - 68px); border: none; display: block;"
+              title="DomoNow Vue Analytics & Predictive Demand"
+            ></iframe>
+          `;
+        }
+      }
+    },
+    unmount: async () => {
+      console.log('[Root Config] Unmounting Vue Analytics MFE...');
+      const container = document.getElementById('single-spa-application:@domonow/vue-analytics');
+      if (container) {
+        container.style.display = 'none';
+      }
     }
-  },
+  }),
   activeWhen: (location) => location.pathname.startsWith('/analytics')
 });
 

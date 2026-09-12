@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  root-mfe:
+    build:
+      context: ..
+      dockerfile: podman/Containerfile.root-mfe
+    container_name: domonow-root-mfe
+    ports:
+      - "9000:9000"
+    networks:
+      - domonow-network
+    restart: unless-stopped
+
+  angular-mfe:
+    build:
+      context: ..
+      dockerfile: podman/Containerfile.angular-mfe
+    container_name: domonow-angular-mfe
+    ports:
+      - "9001:9001"
+    networks:
+      - domonow-network
+    restart: unless-stopped
+
+  vue-mfe:
+    build:
+      context: ..
+      dockerfile: podman/Containerfile.vue-mfe
+    container_name: domonow-vue-mfe
+    ports:
+      - "9002:9002"
+    networks:
+      - domonow-network
+    restart: unless-stopped
+
+networks:
+  domonow-network:
+    driver: bridge

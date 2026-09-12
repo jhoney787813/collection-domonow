@@ -1,0 +1,26 @@
+# ==============================================================================
+# DomoNow PropTech Platform - Angular 19 Parking Operations MFE (Containerfile)
+# Port: 9001 | Architecture: ARM64 Apple Silicon & x86_64
+# ==============================================================================
+
+FROM node:22-alpine
+
+WORKDIR /app
+
+# 1. Copy shared design tokens
+COPY src/frontend/domonow-ui-tokens ./src/frontend/domonow-ui-tokens
+
+# 2. Copy Angular MFE package manifests and install dependencies
+COPY src/frontend/domonow-angular-parking/package*.json ./src/frontend/domonow-angular-parking/
+WORKDIR /app/src/frontend/domonow-angular-parking
+RUN npm install
+
+# 3. Copy source files
+COPY src/frontend/domonow-angular-parking ./
+
+EXPOSE 9001
+
+ENV HOST=0.0.0.0
+ENV PORT=9001
+
+CMD ["npx", "vite", "--host", "0.0.0.0", "--port", "9001"]
