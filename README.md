@@ -113,3 +113,15 @@ podman-compose -f podman/podman-compose.yaml up -d
 * **Vue 3 Analytics MFE:** `http://localhost:9002`
 * **Backend API (.NET 10):** `http://localhost:5000` (Swagger UI: `http://localhost:5000/swagger`)
 * **PostgreSQL 17 Database:** `localhost:5432` (`domonow_parking`)
+
+---
+
+## 5. Technical Architecture Documentation (C4 Model & Draw.io)
+
+Consulte la documentación técnica formal completa y las justificaciones de ingeniería en:
+* 📘 [docs/architecture/README.md](docs/architecture/README.md): Documento técnico maestro con justificación arquitectónica en lenguaje natural (Microfrontends Single-SPA, Angular 19 vs Vue 3, CQRS y Vertical Slice Architecture) y diagramas Mermaid interactivos.
+* 📊 [c4-architecture.drawio](docs/architecture/c4-architecture.drawio): Diagrama maestro multi-pestaña en formato nativo Draw.io (Diagrams.net).
+* 🌐 [c4-context.drawio](docs/architecture/c4-context.drawio): C4 Nivel 1 - Diagrama de Contexto del Sistema.
+* 📦 [c4-containers.drawio](docs/architecture/c4-containers.drawio): C4 Nivel 2 - Diagrama de Contenedores.
+* 🧩 [c4-components.drawio](docs/architecture/c4-components.drawio): C4 Nivel 3 - Diagrama de Componentes (Frontend y Backend Vertical Slices).
+

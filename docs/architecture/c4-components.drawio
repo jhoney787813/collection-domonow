@@ -1,0 +1,220 @@
+<mxfile host="Electron" modified="2026-09-12T19:15:00.000Z" agent="DomoNow Architecture Team" version="21.6.8" type="device">
+  <diagram id="c4-components-diagram" name="C4 Nivel 3 - Diagrama de Componentes">
+    <mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1400" background="#F8FAFC" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Titulo -->
+        <mxCell id="title_block" value="&lt;b style=&quot;font-size: 22px; color: #0F172A;&quot;&gt;DomoNow PropTech Platform - Diagrama de Componentes (C4 Nivel 3)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 13px; color: #64748B;&quot;&gt;Desglose de Microfrontends (Frontend) y Vertical Slice Architecture con CQRS (Backend .NET 10)&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="1100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================================================= -->
+        <!-- SECCION 1: COMPONENTES FRONTEND (MICROFRONTENDS EN BROWSER RUNTIME)       -->
+        <!-- ========================================================================= -->
+        <mxCell id="box_fe_cluster" value="Cluster Frontend Microfrontends (Single-SPA Runtime)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#1E293B;align=left;verticalAlign=top;spacingLeft=15;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="840" height="1220" as="geometry" />
+        </mxCell>
+
+        <!-- 1.1 Root Config Components -->
+        <mxCell id="box_root_components" value="Contenedor 1: Root Shell Orchestrator (:9000)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#93C5FD;strokeWidth=1.5;fontStyle=1;fontSize=12;fontColor=#1E40AF;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="90" y="140" width="780" height="230" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_auth" value="&lt;b&gt;AuthController&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[TypeScript / HTML5]&lt;/span&gt;&lt;br&gt;Gestión de sesión en localStorage, credenciales estáticas de portería, autocompletado demo y logout." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B82F6;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="110" y="180" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_router" value="&lt;b&gt;SingleSpaRouter&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Single-SPA Core]&lt;/span&gt;&lt;br&gt;Guarda rutas activas según autenticación, gestiona activeWhen y monta/desmonta contenedores iframes." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B82F6;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="370" y="180" width="230" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_i18n_root" value="&lt;b&gt;I18nCoordinator&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[CustomEvent / postMessage]&lt;/span&gt;&lt;br&gt;Conmutador reactivo ESP/ENG, actualiza barra institucional y transmite eventos a los MFEs." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B82F6;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="630" y="180" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- 1.2 Angular 19 Parking Components -->
+        <mxCell id="box_angular_components" value="Contenedor 2: Microfrontend Angular 19 - Operaciones (:9001)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#FCA5A5;strokeWidth=1.5;fontStyle=1;fontSize=12;fontColor=#991B1B;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="90" y="400" width="780" height="390" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ang_grid" value="&lt;b&gt;ParkingGridComponent&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Angular Component]&lt;/span&gt;&lt;br&gt;Grilla visual de 30 cupos (P-01 a P-30), badges de estado, filtros y trigger de checkout/ingreso." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EF4444;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="110" y="440" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ang_modals" value="&lt;b&gt;Entry &amp; Checkout Modals&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Angular Reactive Forms]&lt;/span&gt;&lt;br&gt;Normalización de placas (ABC123), selección de unidad residencial, cálculo de tiempo de estancia." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EF4444;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="370" y="440" width="230" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ang_concurrency" value="&lt;b&gt;ConcurrencySimulator&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[RxJS / Signals]&lt;/span&gt;&lt;br&gt;Simulador de ráfaga concurrente anti-carreras para cupo P-15 (previene asignaciones simultáneas)." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EF4444;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="630" y="440" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ang_service" value="&lt;b&gt;ParkingService (Signal Store)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Angular Signals]&lt;/span&gt;&lt;br&gt;Estado reactivo de cupos, contadores KPI (totales, disponibles, ocupados) y despacho de eventos al bus." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B91C1C;strokeWidth=2;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="230" y="560" width="260" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ang_i18n" value="&lt;b&gt;Angular I18nService&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Signal I18n Adapter]&lt;/span&gt;&lt;br&gt;Escucha postMessage y domonow:lang-changed, emitiendo traducciones automáticas al template." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B91C1C;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="520" y="560" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- 1.3 Vue 3 Analytics Components -->
+        <mxCell id="box_vue_components" value="Contenedor 3: Microfrontend Vue 3 - Analítica &amp; Demanda (:9002)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#A7F3D0;strokeWidth=1.5;fontStyle=1;fontSize=12;fontColor=#065F46;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="90" y="820" width="780" height="470" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_vue_heatmap" value="&lt;b&gt;DemandHeatmapComponent&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Vue 3 SFC]&lt;/span&gt;&lt;br&gt;Matriz 24x7 de saturación por franjas y días, cálculo de color dinámico y tooltips interactivos." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#10B981;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="110" y="860" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_vue_forecaster" value="&lt;b&gt;PeakHourForecaster&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Vue 3 SFC / Chart]&lt;/span&gt;&lt;br&gt;Curva estimada de ocupación por horas y tarjeta de especificaciones de inferencia ONNX ML." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#10B981;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="370" y="860" width="230" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_vue_feed" value="&lt;b&gt;ActivityFeedComponent&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Vue 3 SFC]&lt;/span&gt;&lt;br&gt;Feed de eventos en tiempo real con tag inter-MFE pulse, alimentado por el bus de eventos." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#10B981;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="630" y="860" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_vue_store" value="&lt;b&gt;AnalyticsStore (Pinia)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Pinia Reactive Store]&lt;/span&gt;&lt;br&gt;Gestión de métricas (tasa de ocupación, turnaround promedio, visitas hoy) y escucha de eventos cross-MFE." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#047857;strokeWidth=2;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="300" y="990" width="370" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================================================= -->
+        <!-- SECCION 2: COMPONENTES BACKEND (VERTICAL SLICE ARCHITECTURE & CQRS)      -->
+        <!-- ========================================================================= -->
+        <mxCell id="box_be_cluster" value="Cluster Backend: Arquitectura Vertical Slice con CQRS (.NET 10 LTS)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#DDD6FE;strokeWidth=2;fontStyle=1;fontSize=14;fontColor=#4A1E9E;align=left;verticalAlign=top;spacingLeft=15;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="960" y="100" width="1180" height="1220" as="geometry" />
+        </mxCell>
+
+        <!-- 2.1 Pipeline MediatR y Middleware -->
+        <mxCell id="box_pipeline" value="Pipeline de Aplicación (MediatR Behaviors &amp; Middleware)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#C084FC;strokeWidth=1.5;fontStyle=1;fontSize=12;fontColor=#6B21A8;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="990" y="140" width="1120" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_pipe_val" value="&lt;b&gt;ValidationBehavior&lt;/b&gt;&lt;br&gt;FluentValidation pre-handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A855F7;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="175" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_pipe_log" value="&lt;b&gt;LoggingAndAuditBehavior&lt;/b&gt;&lt;br&gt;Trazabilidad y Métricas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A855F7;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="175" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_pipe_tx" value="&lt;b&gt;TransactionBehavior&lt;/b&gt;&lt;br&gt;Transacciones y Retry Policy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A855F7;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1570" y="175" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_pipe_ex" value="&lt;b&gt;ExceptionHandlingMiddleware&lt;/b&gt;&lt;br&gt;Mapea Conflict a HTTP 409" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A855F7;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1840" y="175" width="250" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 2.2 VERTICAL SLICE 1: RegisterParkingEntry (Command) -->
+        <mxCell id="slice_entry" value="&lt;b&gt;[Vertical Slice: RegisterParkingEntry]&lt;/b&gt;&lt;br&gt;Caso de Uso: Asignación de Cupo a Visitante (Transaccional - Escritura)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C35DE;strokeWidth=2;fontStyle=0;fontSize=12;fontColor=#1E293B;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="990" y="290" width="540" height="380" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_entry_ep" value="&lt;b&gt;RegisterEntryEndpoint&lt;/b&gt;&lt;br&gt;POST /api/parking-assignments" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7E22CE;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="335" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_entry_cmd" value="&lt;b&gt;RegisterParkingEntryCommand&lt;/b&gt;&lt;br&gt;Record inmutable: SpotId, Plate, Unit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7E22CE;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="335" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_entry_hnd" value="&lt;b&gt;RegisterParkingEntryCommandHandler&lt;/b&gt;&lt;br&gt;Carga agregado ParkingSpot, invoca AssignSpot() y persiste con EF Core 10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6C35DE;strokeColor=#4A1E9E;fontColor=#FFFFFF;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="415" width="500" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_entry_agg" value="&lt;b&gt;Agregado: ParkingSpot (Domain Entity)&lt;/b&gt;&lt;br&gt;Invariante: Si Status != Available -&amp;gt; Throw DomainConflictException&lt;br&gt;Genera: SpotAssignedDomainEvent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#6C35DE;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="515" width="500" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_entry_lock" value="&lt;b&gt;Optimistic Lock Token: RowVersion (PostgreSQL xmin)&lt;/b&gt;&lt;br&gt;+ Restricción física en DB: uq_parking_active_assignment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#EF4444;fontColor=#991B1B;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="605" width="500" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- 2.3 VERTICAL SLICE 2: CompleteCheckout (Command) -->
+        <mxCell id="slice_checkout" value="&lt;b&gt;[Vertical Slice: CompleteParkingCheckout]&lt;/b&gt;&lt;br&gt;Caso de Uso: Salida y Liberación de Cupo (Transaccional - Escritura)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C35DE;strokeWidth=2;fontStyle=0;fontSize=12;fontColor=#1E293B;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1570" y="290" width="540" height="380" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_chk_ep" value="&lt;b&gt;CompleteCheckoutEndpoint&lt;/b&gt;&lt;br&gt;POST /api/parking-assignments/{id}/checkout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7E22CE;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1590" y="335" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_chk_cmd" value="&lt;b&gt;CompleteCheckoutCommand&lt;/b&gt;&lt;br&gt;AssignmentId, Timestamp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7E22CE;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1860" y="335" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_chk_hnd" value="&lt;b&gt;CompleteParkingCheckoutCommandHandler&lt;/b&gt;&lt;br&gt;Cálculo de minutos de estadía, verificación de cobro, actualización de estado a Available" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6C35DE;strokeColor=#4A1E9E;fontColor=#FFFFFF;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1590" y="415" width="500" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_chk_agg" value="&lt;b&gt;Agregado: ParkingAssignment&lt;/b&gt;&lt;br&gt;Invariante: ExitDate &amp;gt;= EntryDate, Status -&amp;gt; Completed&lt;br&gt;Genera: SpotReleasedDomainEvent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#6C35DE;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1590" y="515" width="500" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- 2.4 VERTICAL SLICE 3: GetParkingSpots (Query) -->
+        <mxCell id="slice_query_spots" value="&lt;b&gt;[Vertical Slice: GetParkingSpotsQuery]&lt;/b&gt;&lt;br&gt;Caso de Uso: Consulta de Grilla de Cupos (Lectura de Alta Frecuencia)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=2;fontStyle=0;fontSize=12;fontColor=#1E293B;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="990" y="700" width="540" height="280" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_q_ep" value="&lt;b&gt;GetSpotsEndpoint&lt;/b&gt;&lt;br&gt;GET /api/parking-spots" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#0284C7;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="745" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_q_hnd" value="&lt;b&gt;GetParkingSpotsQueryHandler&lt;/b&gt;&lt;br&gt;&lt;b style=&quot;color:#0284C7;&quot;&gt;Lectura Directa (Dapper / Read-Only Context)&lt;/b&gt;&lt;br&gt;Omite tracking de entidades y valida primero en Redis Cache (&amp;lt; 2ms)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0284C7;align=center;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="815" width="500" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_q_dto" value="&lt;b&gt;ParkingSpotReadModel / DTO&lt;/b&gt;&lt;br&gt;Id, SpotNumber, Status, CurrentPlate, EntryTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#0284C7;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="910" width="500" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 2.5 VERTICAL SLICE 4: GetDemandAnalytics (Query / ML Inference) -->
+        <mxCell id="slice_query_ml" value="&lt;b&gt;[Vertical Slice: GetDemandForecastQuery]&lt;/b&gt;&lt;br&gt;Caso de Uso: Matriz de Demanda 24x7 y Proyección de Picos ML (Lectura Analítica)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=2;fontStyle=0;fontSize=12;fontColor=#1E293B;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1570" y="700" width="540" height="280" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ml_ep" value="&lt;b&gt;GetForecastEndpoint&lt;/b&gt;&lt;br&gt;GET /api/analytics/demand-forecast" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1590" y="745" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ml_hnd" value="&lt;b&gt;GetDemandForecastQueryHandler&lt;/b&gt;&lt;br&gt;Invoca motor de inferencia ONNX / proyección histórica agregada de estancias" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1590" y="815" width="500" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ml_dto" value="&lt;b&gt;DemandForecastDto &amp; Recommendation&lt;/b&gt;&lt;br&gt;HeatmapMatrix[7x5], ProjectedHourlyRate, GatehouseAction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1590" y="910" width="500" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 2.6 Handlers de Eventos de Dominio (Proyecciones Asíncronas) -->
+        <mxCell id="box_domain_handlers" value="Manejadores de Eventos de Dominio (Actualización de Proyecciones de Lectura &amp; Cache)" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#FDE68A;strokeWidth=1.5;fontStyle=1;fontSize=12;fontColor=#92400E;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1020" width="1120" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ev_assigned" value="&lt;b&gt;SpotAssignedDomainEventHandler&lt;/b&gt;&lt;br&gt;1. Invalida cache Redis de cupos disponibles.&lt;br&gt;2. Actualiza proyección de visitas del día en modelo de lectura.&lt;br&gt;3. Emite notificación al bus para el microfrontend de analítica." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="1060" width="510" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_ev_released" value="&lt;b&gt;SpotReleasedDomainEventHandler&lt;/b&gt;&lt;br&gt;1. Invalida cache Redis de cupos.&lt;br&gt;2. Recalcula tiempo promedio de estadía (turnaround minutes).&lt;br&gt;3. Genera registro de auditoría y cobro por fracción." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=1.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1570" y="1060" width="510" height="85" as="geometry" />
+        </mxCell>
+
+        <!-- CONEXIONES CROSS FRONTEND - BACKEND -->
+        <mxCell id="rel_fe_be_cmd" value="HTTP POST /api/parking-assignments" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#6C35DE;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="c_ang_service" target="c_entry_ep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_fe_be_query" value="HTTP GET /api/parking-spots" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#0284C7;strokeWidth=2;exitX=1;exitY=0.8;exitDx=0;exitDy=0;" edge="1" parent="1" source="c_ang_service" target="c_q_ep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_vue_be_query" value="HTTP GET /api/analytics/demand-forecast" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#059669;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="c_vue_store" target="c_ml_ep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
