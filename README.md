@@ -12,6 +12,16 @@
 
 ---
 
+## 🎬 Demo & Presentación del Proyecto
+
+> Mira el video de presentación para entender el contexto, la arquitectura y las decisiones de diseño detrás de esta plataforma.
+
+[![DomoNow PropTech - Visitor Parking Management System](https://img.youtube.com/vi/Auenug4iEvo/maxresdefault.jpg)](https://youtu.be/Auenug4iEvo)
+
+> 📺 **[▶ Ver en YouTube — DomoNow PropTech: Visitor Parking Management System](https://youtu.be/Auenug4iEvo)**
+
+---
+
 ## 1. Project Overview & Architecture
 
 The **DomoNow Visitor Parking Management System** automates and controls physical vehicle access to residential properties. It enforces strict concurrency invariants to eliminate double-booking of visitor parking spots (P-01 to P-30), accelerates gatehouse check-ins, and delivers real-time occupancy metrics and predictive demand intelligence.

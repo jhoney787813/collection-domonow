@@ -18,8 +18,9 @@
 | [05-calidad-pruebas.md](05-calidad-pruebas.md) | ~4 min | Calidad & Pruebas (15%) |
 | [06-seguridad-zero-trust.md](06-seguridad-zero-trust.md) | ~4 min | Uso de IA (15%) + Criterio Senior |
 | [07-cierre-tradeoffs.md](07-cierre-tradeoffs.md) | ~3 min | Comunicación Técnica (5%) |
+| [08-youtube-publicacion.md](08-youtube-publicacion.md) | — | Publicación YouTube + LinkedIn + X |
 
-**Duración total estimada:** ~32 minutos  
+**Duración total estimada de presentación:** ~32 minutos  
 **Recomendación:** Usar cada archivo como guión de lectura directa. Las líneas marcadas con `[MOSTRAR]` corresponden a momentos donde mostrar pantalla, código o demo en vivo.
 
 ---
