@@ -40,20 +40,35 @@
       align-items: center;
       gap: 32px;
     }
-    .domo-logo {
+    .domo-logo-link {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 10px;
       text-decoration: none;
-      font-size: 1.45rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
+      transition: opacity 0.2s ease;
     }
-    .logo-domo {
-      color: #6C35DE;
+    .domo-logo-link:hover {
+      opacity: 0.9;
     }
-    .logo-now {
-      color: #0F172A;
+    .shell-logo-img {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+    .login-logo-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .login-logo-img {
+      height: 52px;
+      width: auto;
+      max-width: 220px;
+      object-fit: contain;
+      display: block;
     }
     .platform-badge {
       background: #FAF5FF;
@@ -64,7 +79,7 @@
       letter-spacing: 0.08em;
       padding: 3px 8px;
       border-radius: 9999px;
-      margin-left: 4px;
+      margin-left: 2px;
     }
     /* Subproject Switcher Tabs */
     .subproject-nav {
@@ -266,10 +281,6 @@
       text-align: center;
       margin-bottom: 24px;
     }
-    .login-brand-header .domo-logo {
-      justify-content: center;
-      margin-bottom: 12px;
-    }
     .login-title {
       font-size: 1.45rem;
       font-weight: 800;
@@ -459,8 +470,8 @@
 
     <div class="login-card">
       <div class="login-brand-header">
-        <div class="domo-logo">
-          <span class="logo-domo">Domo</span><span class="logo-now">Now</span>
+        <div class="login-logo-link">
+          <img src="/domonow-logo-320.webp" alt="DomoNow" class="login-logo-img" />
           <span class="platform-badge">PROPTECH</span>
         </div>
         <h1 id="label-login-title" class="login-title">Control de Acceso</h1>
@@ -537,8 +548,8 @@
        ------------------------------------------------------------- -->
   <header id="domo-shell-navbar" class="domo-shell-navbar" style="display: none;">
     <div class="shell-left">
-      <a href="/parking" class="domo-logo">
-        <span class="logo-domo">Domo</span><span class="logo-now">Now</span>
+      <a href="/parking" class="domo-logo-link" title="DomoNow">
+        <img src="/domonow-logo-320.webp" alt="DomoNow" class="shell-logo-img" />
         <span class="platform-badge">PROPTECH</span>
       </a>
 
