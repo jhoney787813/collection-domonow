@@ -1,45 +1,65 @@
-<mxfile host="Electron" modified="2026-09-12T19:25:00.000Z" agent="DomoNow Architecture Team" version="21.6.8" type="device">
+<mxfile host="Electron" modified="2026-09-12T20:45:00.000Z" agent="DomoNow Architecture Team" version="21.6.8" type="device">
   <diagram id="c4-context-diagram" name="C4 Nivel 1 - Contexto del Sistema">
     <mxGraphModel dx="1422" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="950" background="#F8FAFC" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         
-        <!-- Titulo y Metadatos -->
-        <mxCell id="title_block" value="&lt;b style=&quot;font-size: 22px; color: #0F172A;&quot;&gt;DomoNow Visitor Parking Subsystem - Diagrama de Contexto (C4 Nivel 1)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 13px; color: #64748B;&quot;&gt;Alineado estrictamente a la especificación de negocio (open-spec/specs/visitor-parking/spec.md)&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="60" y="40" width="950" height="50" as="geometry" />
+        <!-- Titulo y Metadatos C4 -->
+        <mxCell id="title_block" value="&lt;b style=&quot;font-size: 22px; color: #0F172A;&quot;&gt;DomoNow Visitor Parking Subsystem - Diagrama de Contexto (C4 Nivel 1)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size: 13px; color: #64748B;&quot;&gt;Especificación oficial de límites del sistema, actores humanos y relaciones externas (open-spec/specs/visitor-parking/spec.md)&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="60" y="35" width="1050" height="50" as="geometry" />
         </mxCell>
 
-        <!-- ACTORES SOPORTADOS EN LA ESPECIFICACION -->
+        <!-- ACTORES C4 OFICIALES (PERSON) -->
         <!-- 1. Guardia de Porteria / Operador de Garita -->
-        <mxCell id="actor_guard" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Persona]&lt;br&gt;Guardia de Portería / Operador&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Operador del puesto de control vehicular en garita. Registra ingresos de visitantes con placa sanitizada, realiza checkouts y consulta cupos en tiempo real.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
-          <mxGeometry x="80" y="240" width="240" height="170" as="geometry" />
+        <mxCell id="actor_guard" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 2px;&quot;&gt;Guardia de Portería / Operador&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #CBD5E1;&quot;&gt;[Persona]&lt;/div&gt;&lt;br&gt;&lt;div style=&quot;font-size: 11px; line-height: 1.4; color: #F8FAFC;&quot;&gt;Operador del puesto de control en garita. Registra ingresos vehiculares con placa normalizada, procesa salidas (checkouts) y consulta disponibilidad de cupos en tiempo real.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
+          <mxGeometry x="80" y="210" width="260" height="180" as="geometry" />
         </mxCell>
 
         <!-- 2. Administrador / Supervisor de Copropiedad -->
-        <mxCell id="actor_admin" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 4px;&quot;&gt;[Persona]&lt;br&gt;Administrador / Supervisor&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #E2E8F0;&quot;&gt;Supervisor de la copropiedad. Monitorea el resumen de asignaciones activas, la tasa de ocupación comunal y la matriz de demanda semanal 24x7.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
-          <mxGeometry x="80" y="520" width="240" height="170" as="geometry" />
+        <mxCell id="actor_admin" value="&lt;div style=&quot;font-weight: bold; font-size: 14px; margin-bottom: 2px;&quot;&gt;Administrador / Supervisor&lt;/div&gt;&lt;div style=&quot;font-size: 11px; color: #CBD5E1;&quot;&gt;[Persona]&lt;/div&gt;&lt;br&gt;&lt;div style=&quot;font-size: 11px; line-height: 1.4; color: #F8FAFC;&quot;&gt;Supervisor de la copropiedad. Monitorea el resumen de asignaciones activas, la rotación de cupos y las matrices analíticas de demanda semanal 24x7.&lt;/div&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=15;" vertex="1" parent="1">
+          <mxGeometry x="80" y="470" width="260" height="180" as="geometry" />
         </mxCell>
 
-        <!-- SISTEMA CENTRAL: DOMONOW VISITOR PARKING SYSTEM -->
-        <mxCell id="system_domonow" value="&lt;div style=&quot;font-weight: bold; font-size: 18px; margin-bottom: 8px;&quot;&gt;[Sistema de Software]&lt;br&gt;DomoNow Visitor Parking Subsystem&lt;/div&gt;&lt;div style=&quot;font-size: 12px; line-height: 1.5; color: #F1F5F9; text-align: left; padding: 0 10px;&quot;&gt;Subsistema de software para copropiedades residenciales que gestiona:&lt;br&gt;• &lt;b&gt;Consulta y Filtrado de 30 Cupos (P-01 a P-30):&lt;/b&gt; Estados Disponible, Ocupado y Fuera de Servicio.&lt;br&gt;• &lt;b&gt;Registro de Ingreso de Visitantes:&lt;/b&gt; Asignación de cupo, normalización de placa (regex ^[A-Z0-9]{5,8}$), registro en UTC.&lt;br&gt;• &lt;b&gt;Salida y Reversión de Cupo (Checkout):&lt;/b&gt; Verificación temporal (ExitTime &gt;= EntryTime) y restauración a Disponible.&lt;br&gt;• &lt;b&gt;Resumen de Asignaciones Activas:&lt;/b&gt; Tiempos transcurridos y unidades de destino.&lt;br&gt;• &lt;b&gt;Control de Alta Concurrencia:&lt;/b&gt; Bloqueo optimista (RowVersion / xmin) y exclusión física de sobreasignación (uq_parking_active_assignment).&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#FFFFFF;align=center;verticalAlign=middle;shadow=1;arcSize=8;" vertex="1" parent="1">
-          <mxGeometry x="520" y="240" width="560" height="450" as="geometry" />
+        <!-- SISTEMA DE SOFTWARE C4 (SOFTWARE SYSTEM) -->
+        <mxCell id="system_domonow" value="&lt;div style=&quot;font-weight: bold; font-size: 18px; margin-bottom: 4px;&quot;&gt;DomoNow Visitor Parking Subsystem&lt;/div&gt;&lt;div style=&quot;font-size: 12px; color: #CBD5E1;&quot;&gt;[Sistema de Software]&lt;/div&gt;&lt;br&gt;&lt;div style=&quot;font-size: 12px; line-height: 1.6; color: #F8FAFC; text-align: left; padding: 0 20px;&quot;&gt;Subsistema de software para control de parqueadero de visitantes en copropiedades:&lt;br&gt;• &lt;b&gt;Consulta y filtrado de 30 cupos comunales (P-01 a P-30)&lt;/b&gt; (Req 1)&lt;br&gt;• &lt;b&gt;Registro de ingreso con normalización regex de placa&lt;/b&gt; (^[A-Z0-9]{5,8}$) (Req 2)&lt;br&gt;• &lt;b&gt;Salida y reversión de cupo con validación de invariante temporal&lt;/b&gt; (ExitTime &amp;gt;= EntryTime) (Req 3)&lt;br&gt;• &lt;b&gt;Resumen en tiempo real de asignaciones activas y tiempos transcurridos&lt;/b&gt; (Req 4)&lt;br&gt;• &lt;b&gt;Defensa estricta de concurrencia optimista (xmin) y exclusión física&lt;/b&gt; (uq_parking_active_assignment) (Req 5)&lt;/div&gt;" style="shape=mxgraph.c4.softwareSystem;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=20;" vertex="1" parent="1">
+          <mxGeometry x="580" y="210" width="580" height="440" as="geometry" />
         </mxCell>
 
-        <!-- RELACIONES ENTRE ACTORES Y SISTEMA -->
-        <!-- Guardia -> DomoNow -->
-        <mxCell id="rel_guard" value="1. Registra ingreso con placa sanitizada (HTTP 201)&lt;br&gt;2. Realiza checkout con reversión a libre (HTTP 200)&lt;br&gt;3. Filtra cupos por estado (Available, Occupied)&lt;br&gt;4. Resuelve carreras concurrentes (HTTP 409)&lt;br&gt;&lt;b&gt;[HTTPS / UI Angular 19 :9001]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=2.5;fontColor=#0F172A;" edge="1" parent="1" source="actor_guard" target="system_domonow">
+        <!-- CONECTORES C4 OFICIALES (RELATIONSHIPS) -->
+        <!-- Guardia -> DomoNow System -->
+        <mxCell id="rel_guard" value="&lt;b&gt;Registra ingresos, realiza checkouts y consulta cupos&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[HTTPS / Web Browser]&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#707070;strokeWidth=1.5;dashed=1;dashPattern=8 4;fontColor=#0F172A;fontSize=11;align=center;verticalAlign=bottom;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="actor_guard" target="system_domonow">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- Admin -> DomoNow -->
-        <mxCell id="rel_admin" value="1. Consulta resumen de asignaciones activas&lt;br&gt;2. Monitorea matriz de demanda 24x7 y rotación&lt;br&gt;3. Audita eventos en tiempo real&lt;br&gt;&lt;b&gt;[HTTPS / UI Vue 3 :9002]&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=2.5;fontColor=#0F172A;" edge="1" parent="1" source="actor_admin" target="system_domonow">
+        <!-- Admin -> DomoNow System -->
+        <mxCell id="rel_admin" value="&lt;b&gt;Supervisa asignaciones activas, rotación y métricas&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[HTTPS / Web Browser]&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#707070;strokeWidth=1.5;dashed=1;dashPattern=8 4;fontColor=#0F172A;fontSize=11;align=center;verticalAlign=bottom;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="actor_admin" target="system_domonow">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- CAJA DE ALINEACION CON OPENSPEC -->
-        <mxCell id="box_spec_trace" value="&lt;b&gt;Trazabilidad de Requerimientos OpenSpec (spec.md):&lt;/b&gt;&lt;br&gt;• Req 1: Spot Retrieval &amp; Status Filtering (GET /api/parking-spots?statusFilter=...)&lt;br&gt;• Req 2: Visitor Parking Entry Registration (POST /api/parking-assignments)&lt;br&gt;• Req 3: Parking Spot Checkout &amp; Status Reversion (POST /api/parking-assignments/{id}/checkout)&lt;br&gt;• Req 4: Active Assignments Summary Query (GET /api/parking-assignments/active)&lt;br&gt;• Req 5: High-Concurrency Allocation Control (10 simultaneous requests -&gt; 1 Created, 9 Conflicts)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#C084FC;strokeWidth=1.5;fontColor=#4A1E9E;align=left;verticalAlign=middle;spacingLeft=15;" vertex="1" parent="1">
-          <mxGeometry x="520" y="730" width="560" height="120" as="geometry" />
+        <!-- LEYENDA C4 OFICIAL -->
+        <mxCell id="box_legend" value="&lt;b style=&quot;font-size: 12px; color: #1E293B;&quot;&gt;Leyenda Oficial C4 - Modelo de Contexto&lt;/b&gt;" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1;align=left;verticalAlign=top;spacingLeft=15;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="690" width="450" height="190" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg_person" value="&lt;b&gt;Persona&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;Usuario o actor humano&lt;/span&gt;" style="shape=mxgraph.c4.person;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052C52;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=8;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="730" width="130" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg_system" value="&lt;b&gt;Sistema de Software&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;Límite del sistema central&lt;/span&gt;" style="shape=mxgraph.c4.softwareSystem;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#FFFFFF;align=center;verticalAlign=top;spacingTop=8;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="250" y="730" width="150" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg_rel" value="&lt;b&gt;Relación / Conector C4&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;[Protocolo / Canal]&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#707070;strokeWidth=1.5;dashed=1;dashPattern=8 4;fontColor=#333333;fontSize=10;align=center;labelBackgroundColor=#FFFFFF;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="850" as="sourcePoint" />
+            <mxPoint x="400" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- CAJA DE TRAZABILIDAD DE REQUERIMIENTOS OPENSPEC -->
+        <mxCell id="box_spec_trace" value="&lt;b style=&quot;font-size: 12px; color: #1E293B;&quot;&gt;Trazabilidad de Requerimientos OpenSpec (spec.md):&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 11px; line-height: 1.5; color: #334155;&quot;&gt;• &lt;b&gt;Req 1:&lt;/b&gt; Spot Retrieval &amp;amp; Status Filtering (GET /api/parking-spots?statusFilter=...)&lt;br&gt;• &lt;b&gt;Req 2:&lt;/b&gt; Visitor Parking Entry Registration (POST /api/parking-assignments, regex ^[A-Z0-9]{5,8}$)&lt;br&gt;• &lt;b&gt;Req 3:&lt;/b&gt; Parking Spot Checkout &amp;amp; Status Reversion (POST /api/parking-assignments/{id}/checkout, ExitTime &amp;gt;= EntryTime)&lt;br&gt;• &lt;b&gt;Req 4:&lt;/b&gt; Active Assignments Summary Query (GET /api/parking-assignments/active)&lt;br&gt;• &lt;b&gt;Req 5:&lt;/b&gt; High-Concurrency Allocation Control (10 peticiones concurrentes a P-15 -&amp;gt; 1 HTTP 201 Created, 9 HTTP 409 Conflict)&lt;/span&gt;" style="shape=rect;rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#C084FC;strokeWidth=1.5;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=15;" vertex="1" parent="1">
+          <mxGeometry x="580" y="690" width="580" height="190" as="geometry" />
         </mxCell>
 
       </root>
