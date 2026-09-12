@@ -76,23 +76,30 @@ Los diagramas nativos en formato editable de Draw.io (Diagrams.net) están dispo
 * 📦 **Diagrama de Contenedores (Nivel 2):** [c4-containers.drawio](file:///Users/deals/Documents/GIT/DOMONOW-TEST/collection-domonow/docs/architecture/c4-containers.drawio)
 * 🧩 **Diagrama de Componentes (Nivel 3):** [c4-components.drawio](file:///Users/deals/Documents/GIT/DOMONOW-TEST/collection-domonow/docs/architecture/c4-components.drawio)
 
+A continuación se presentan las **capturas visuales oficiales exportadas desde Draw.io** junto con sus representaciones estructurales en **Mermaid**:
+
 ---
 
 ### 3.1 C4 - Nivel 1: Diagrama de Contexto del Sistema
 
 Muestra el sistema en su entorno operativo delimitado exclusivamente a los dos actores humanos del dominio:
 
+#### Vista Gráfica Oficial (Draw.io):
+![C4 Nivel 1 - Diagrama de Contexto](img/c4-context.png)
+
+#### Diagrama Estructural (Mermaid):
 ```mermaid
-C4Context
-    title DomoNow Visitor Parking Subsystem - Diagrama de Contexto (C4 Nivel 1)
+flowchart TB
+    classDef person fill:#08427B,stroke:#052C52,color:#FFFFFF,stroke-width:2px;
+    classDef system fill:#1168BD,stroke:#0B4884,color:#FFFFFF,stroke-width:2px;
 
-    Person(guard, "Guardia de Portería / Operador", "Opera garita en vivo: consulta cupos, registra entradas con placa normalizada, realiza checkout y resuelve carreras.")
-    Person(admin, "Administrador / Supervisor", "Supervisa la copropiedad: consulta asignaciones activas, matriz de demanda 24x7 y rotación.")
+    guard["<b>Guardia de Portería / Operador</b><br>[Persona]<br><br>Operador del puesto de control en garita.<br>Registra ingresos, procesa checkouts y consulta cupos."]::^person
+    admin["<b>Administrador / Supervisor</b><br>[Persona]<br><br>Supervisor de la copropiedad.<br>Monitorea ocupación, rotación y matrices 24x7."]::^person
 
-    System(domonow, "DomoNow Visitor Parking Subsystem", "Subsistema de software que gestiona la asignación de 30 cupos (P-01 a P-30), control de ingresos/salidas, validaciones invariantes y prevención de carreras concurrentes.")
+    domonow["<b>DomoNow Visitor Parking Subsystem</b><br>[Sistema de Software]<br><br>Gestiona 30 cupos comunales (P-01 a P-30), normalización regex de placas (^[A-Z0-9]{5,8}$),<br>invariante temporal en checkout y exclusión física de sobreasignación (uq_parking_active_assignment)."]::^system
 
-    Rel(guard, domonow, "Registra ingresos, realiza checkouts y consulta cupos", "HTTPS / Web Browser")
-    Rel(admin, domonow, "Supervisa asignaciones activas y analítica de demanda", "HTTPS / Web Browser")
+    guard -->|"Registra ingresos, checkouts y consulta cupos<br><b>[HTTPS / Web Browser]</b>"| domonow
+    admin -->|"Supervisa asignaciones activas, rotación y métricas<br><b>[HTTPS / Web Browser]</b>"| domonow
 ```
 
 ---
@@ -101,30 +108,38 @@ C4Context
 
 Ilustra los contenedores ejecutables, tecnologías seleccionadas, protocolos y almacenamiento persistente:
 
+#### Vista Gráfica Oficial (Draw.io):
+![C4 Nivel 2 - Diagrama de Contenedores](img/c4-containers.png)
+
+#### Diagrama Estructural (Mermaid):
 ```mermaid
-C4Container
-    title DomoNow Visitor Parking Subsystem - Diagrama de Contenedores (C4 Nivel 2)
+flowchart TB
+    classDef person fill:#08427B,stroke:#052C52,color:#FFFFFF,stroke-width:2px;
+    classDef container fill:#438DD5,stroke:#2E6295,color:#FFFFFF,stroke-width:2px;
+    classDef db fill:#2B78C5,stroke:#1C4E96,color:#FFFFFF,stroke-width:2px;
+    classDef lib fill:#85BBF0,stroke:#5D82A8,color:#000000,stroke-width:2px;
 
-    Person(guard, "Guardia de Garita", "Opera terminal de control en portería")
-    Person(admin, "Administrador", "Supervisa ocupación y analítica")
+    guard["<b>Guardia de Garita</b><br>[Persona]"]:::person
+    admin["<b>Administrador</b><br>[Persona]"]:::person
 
-    System_Boundary(domonow_system, "DomoNow Visitor Parking Subsystem") {
-        Container(root_mfe, "Root Shell Orchestrator", "Single-SPA / TypeScript", "Puerto 9000. Login institucional, sesión en localStorage, botón logout, header con logo oficial y selector [ 🇪🇸 ESP | 🇺🇸 ENG ].")
-        Container(angular_mfe, "Operaciones de Garita MFE", "Angular 19 Standalone Signals", "Puerto 9001 (/parking). Grilla de 30 cupos, filtros por estado, modales con validación regex de placa y simulador de ráfaga concurrente a P-15.")
-        Container(vue_mfe, "Analítica y Monitoreo MFE", "Vue 3 Composition API & Pinia", "Puerto 9002 (/analytics). Resumen de asignaciones activas, KPIs de rotación, matriz semanal 24x7 y feed de eventos en vivo.")
-        Container(tokens_pkg, "@domonow/ui-tokens", "Librería Compartida / NPM", "Tokens institucionales (#6C35DE, tipografía Plus Jakarta Sans) y diccionarios centralizados de internacionalización.")
-        Container(backend_api, "DomoNow Parking API", ".NET 10 LTS ASP.NET Core", "Puerto 5050. Vertical Slice Architecture + CQRS con MediatR. Expone endpoints de consulta, registro, checkout y resumen activo.")
-        ContainerDb(db_postgres, "Base de Datos Relacional", "PostgreSQL 17 Alpine", "Puerto 5432. Tablas parking_spots y parking_assignments. Índice único parcial uq_parking_active_assignment y control optimista xmin.")
-    }
+    subgraph SystemBoundary ["DomoNow Visitor Parking Subsystem [Límite de Sistema]"]
+        root["<b>Root Shell Orchestrator</b><br>[Contenedor: Single-SPA / TypeScript :9000]<br>Login institucional, sesión en localStorage, botón logout y selector [ 🇪🇸 ESP | 🇺🇸 ENG ]"]:::container
+        angular["<b>Operaciones de Garita MFE</b><br>[Contenedor: Angular 19 Standalone Signals :9001 /parking]<br>Grilla de 30 cupos, filtros por estado, modales con regex y simulador concurrente P-15"]:::container
+        vue["<b>Analítica y Monitoreo MFE</b><br>[Contenedor: Vue 3 Composition API & Pinia :9002 /analytics]<br>Resumen activo, KPIs de rotación, matriz semanal 24x7 y feed en tiempo real"]:::container
+        tokens["<b>@domonow/ui-tokens</b><br>[Contenedor: Librería Compartida / NPM]<br>Tokens institucionales (#6C35DE, tipografía) y diccionarios centralizados de i18n"]:::lib
+        api["<b>DomoNow Parking API</b><br>[Contenedor: .NET 10 LTS ASP.NET Core :5050]<br>Vertical Slice Architecture + CQRS con MediatR (endpoints consulta, ingreso, salida y resumen)"]:::container
+        db[("<b>Base de Datos Relacional</b><br>[Contenedor: PostgreSQL 17 Alpine :5432]<br>Tablas parking_spots (P-01 a P-30) y parking_assignments. Índice uq_parking_active_assignment y xmin")]:::db
+    end
 
-    Rel(guard, root_mfe, "Accede a login y opera garita", "HTTPS :9000")
-    Rel(admin, root_mfe, "Accede a login y analítica", "HTTPS :9000")
-    Rel(root_mfe, angular_mfe, "Carga y monta en runtime bajo /parking", "SystemJS / ES Modules")
-    Rel(root_mfe, vue_mfe, "Carga y monta en runtime bajo /analytics", "SystemJS / ES Modules")
-    Rel(tokens_pkg, vue_mfe, "Aplica tokens de diseño y diccionarios i18n", "NPM Link / ES Modules")
-    Rel(angular_mfe, backend_api, "Envía comandos de registro, checkout y consulta cupos (Req 1, 2, 3, 5)", "HTTPS / REST JSON :5050")
-    Rel(vue_mfe, backend_api, "Consulta asignaciones activas y métricas de rotación (Req 4)", "HTTPS / REST JSON :5050")
-    Rel(backend_api, db_postgres, "Lee y escribe entidades con concurrencia optimista xmin", "TCP 5432 / Npgsql EF Core 10")
+    guard -->|"Accede a login y opera garita<br><b>[HTTPS :9000]</b>"| root
+    admin -->|"Accede a login y analítica<br><b>[HTTPS :9000]</b>"| root
+    root -->|"Carga y monta en runtime bajo /parking<br><b>[SystemJS / ES Modules]</b>"| angular
+    root -->|"Carga y monta en runtime bajo /analytics<br><b>[SystemJS / ES Modules]</b>"| vue
+    tokens -.->|"Aplica tokens de diseño y diccionarios i18n"| angular
+    tokens -.->|"Aplica tokens de diseño y diccionarios i18n"| vue
+    angular -->|"Envía comandos de registro, checkout y consulta cupos (Req 1, 2, 3, 5)<br><b>[HTTPS / REST JSON :5050]</b>"| api
+    vue -->|"Consulta asignaciones activas y métricas de rotación (Req 4)<br><b>[HTTPS / REST JSON :5050]</b>"| api
+    api -->|"Lee y escribe entidades con concurrencia optimista xmin<br><b>[TCP 5432 / Npgsql EF Core 10]</b>"| db
 ```
 
 ---
@@ -133,51 +148,61 @@ C4Container
 
 Detalla los componentes internos de Frontend, los Vertical Slices del Backend y la persistencia en base de datos:
 
+#### Vista Gráfica Oficial (Draw.io):
+![C4 Nivel 3 - Diagrama de Componentes](img/c4-components.png)
+
+#### Diagrama Estructural (Mermaid):
 ```mermaid
-C4Component
-    title DomoNow Visitor Parking Subsystem - Diagrama de Componentes (C4 Nivel 3)
+flowchart TB
+    classDef comp fill:#85BBF0,stroke:#5D82A8,color:#000000,stroke-width:1.5px;
+    classDef dbTab fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E,stroke-width:1.5px;
 
-    Container_Boundary(ang_boundary, "Operaciones de Garita MFE (Angular 19 :9001)") {
-        Component(c_grid, "ParkingGridComponent", "Angular Standalone", "Grilla reactiva de 30 cupos (P-01 a P-30) con filtrado por estado (Req 1).")
-        Component(c_modals, "EntryCheckoutModalsComponent", "Angular Standalone", "Modales de registro con sanitización regex ^[A-Z0-9]{5,8}$ y checkout (Req 2 & 3).")
-        Component(c_sim, "ConcurrencySimulatorComponent", "Angular Standalone", "Simula 10 peticiones concurrentes a P-15 (1 HTTP 201 y 9 HTTP 409) (Req 5).")
-        Component(c_svc, "ParkingService", "Angular Signal Store", "Manejo reactivo de estado con Signals y despacho HTTP hacia la API.")
-    }
+    subgraph MfeAngular ["Operaciones de Garita MFE [Límite de Contenedor: Angular 19 Signals :9001]"]
+        grid["<b>ParkingGridComponent</b><br>[Angular Standalone - Req 1: Grilla y Filtros 30 Cupos]"]:::comp
+        modals["<b>EntryCheckoutModalsComponent</b><br>[Angular Standalone - Req 2 & 3: Regex ^[A-Z0-9]{5,8}$ y Checkout]"]:::comp
+        sim["<b>ConcurrencySimulatorComponent</b><br>[Angular Standalone - Req 5: Simulador 10 ráfagas a P-15]"]:::comp
+        svc["<b>ParkingService</b><br>[Angular Signal Store & HTTP Client]"]:::comp
+    end
 
-    Container_Boundary(vue_boundary, "Analítica y Monitoreo MFE (Vue 3 :9002)") {
-        Component(c_vstore, "AnalyticsStore", "Pinia Store", "Almacena resumen de asignaciones activas y KPIs de ocupación (Req 4).")
-        Component(c_heat, "DemandHeatmapComponent", "Vue 3 SFC", "Matriz semanal 24x7 de demanda y saturación por franjas horarias.")
-        Component(c_fcst, "PeakHourForecasterComponent", "Vue 3 SFC", "Curva estimada de demanda horaria y especificaciones ONNX.")
-        Component(c_feed, "ActivityFeedComponent", "Vue 3 SFC", "Feed en tiempo real sincronizado mediante el bus inter-MFE.")
-    }
+    subgraph MfeVue ["Analítica y Monitoreo MFE [Límite de Contenedor: Vue 3 Pinia :9002]"]
+        heat["<b>DemandHeatmapComponent</b><br>[Vue 3 SFC - Matriz semanal 24x7]"]:::comp
+        fcst["<b>PeakHourForecasterComponent</b><br>[Vue 3 SFC / Chart - Curva horaria ONNX]"]:::comp
+        feed["<b>ActivityFeedComponent</b><br>[Vue 3 SFC - Feed en tiempo real inter-MFE]"]:::comp
+        store["<b>AnalyticsStore</b><br>[Pinia Store & HTTP Client - Req 4: Resumen Activo]"]:::comp
+    end
 
-    Container_Boundary(api_boundary, "DomoNow Parking API (.NET 10 LTS :5050)") {
-        Component(c_spots_ctrl, "ParkingSpotsController", "ASP.NET Core Controller", "Expone GET /api/parking-spots (Req 1).")
-        Component(c_assign_ctrl, "ParkingAssignmentsController", "ASP.NET Core Controller", "Expone POST registro, POST checkout y GET active (Req 2, 3, 4, 5).")
-        Component(c_val_pipe, "ValidationBehavior", "MediatR IPipelineBehavior", "Ejecuta validaciones con FluentValidation antes del handler.")
-        Component(c_ex_mid, "ExceptionMiddleware", "ASP.NET Core Middleware", "Mapea excepciones a ProblemDetails (400, 404, 409, 422).")
-        Component(h_q_spots, "GetParkingSpotsQueryHandler", "MediatR Query Handler", "Consulta optimizada sin tracking de 30 cupos (Req 1).")
-        Component(h_c_entry, "RegisterParkingEntryCommandHandler", "MediatR Command Handler", "Valida cupo, sanitiza placa y persiste en UTC (Req 2 & 5).")
-        Component(h_c_chk, "RegisterParkingCheckoutCommandHandler", "MediatR Command Handler", "Verifica ExitTime >= EntryTime, calcula estadía y restaura cupo a Available (Req 3).")
-        Component(h_q_act, "GetActiveAssignmentsQueryHandler", "MediatR Query Handler", "Consulta asignaciones activas con minutos de permanencia (Req 4).")
-        Component(c_domain, "Domain Model & Aggregates", "Domain Layer", "Agregados ParkingSpot, ParkingAssignment y VO LicensePlate.")
-        Component(c_ef, "ParkingDbContext & Repositories", "EF Core 10 / Npgsql", "Mapeo relacional, concurrencia xmin y persistencia transaccional.")
-    }
+    subgraph BackendApi ["DomoNow Parking API [Límite de Contenedor: .NET 10 LTS ASP.NET Core :5050]"]
+        spotsCtrl["<b>ParkingSpotsController</b><br>[GET /api/parking-spots - Req 1]"]:::comp
+        assignCtrl["<b>ParkingAssignmentsController</b><br>[POST entry, checkout, GET active - Req 2, 3, 4, 5]"]:::comp
+        valBeh["<b>ValidationBehavior</b><br>[MediatR Behavior - FluentValidation regex]"]:::comp
+        exMid["<b>ExceptionMiddleware</b><br>[ProblemDetails: 400, 404, 409, 422]"]:::comp
+        hSpots["<b>GetParkingSpotsQueryHandler</b><br>[Req 1: Slice Consulta 30 Cupos]"]:::comp
+        hEntry["<b>RegisterParkingEntryCommandHandler</b><br>[Req 2 & 5: Slice Ingreso y Concurrencia]"]:::comp
+        hChk["<b>RegisterParkingCheckoutCommandHandler</b><br>[Req 3: Slice Salida y Reversión a Libre]"]:::comp
+        hAct["<b>GetActiveAssignmentsQueryHandler</b><br>[Req 4: Slice Resumen Activo]"]:::comp
+        domain["<b>Domain Model & Aggregates</b><br>[ParkingSpot, ParkingAssignment, LicensePlate VO]"]:::comp
+        ef["<b>ParkingDbContext & Repositories</b><br>[EF Core 10 / Npgsql Provider & xmin]"]:::comp
+    end
 
-    Container_Boundary(db_boundary, "Base de Datos Relacional (PostgreSQL 17 :5432)") {
-        Component(t_spots, "parking_spots", "Tabla PostgreSQL", "Almacena 30 cupos (P-01 a P-30) con token xmin.")
-        Component(t_assign, "parking_assignments", "Tabla PostgreSQL", "Historial y asignaciones activas.")
-        Component(i_active, "uq_parking_active_assignment", "Índice Único Parcial", "Garantía física: WHERE status = 1 (Req 5).")
-    }
+    subgraph DbPostgres ["Base de Datos Relacional [Límite de Contenedor: PostgreSQL 17 Alpine :5432]"]
+        tSpots[("<b>parking_spots</b><br>[30 cupos P-01 a P-30, xmin Concurrency]")]:::dbTab
+        tAssign[("<b>parking_assignments</b><br>[Asignaciones activas e historial]")]:::dbTab
+        iActive{{"<b>uq_parking_active_assignment</b><br>[UNIQUE INDEX WHERE status = 1 - Req 5]"}}:::dbTab
+    end
 
-    Rel(c_svc, c_spots_ctrl, "GET /api/parking-spots?statusFilter=...", "HTTPS / REST JSON")
-    Rel(c_svc, c_assign_ctrl, "POST /api/parking-assignments & checkout", "HTTPS / REST JSON")
-    Rel(c_vstore, c_assign_ctrl, "GET /api/parking-assignments/active", "HTTPS / REST JSON")
-    Rel(c_assign_ctrl, h_c_entry, "Despacha comando con MediatR", "In-Process")
-    Rel(h_c_entry, c_domain, "Aplica invariantes de agregado", "In-Process")
-    Rel(h_c_entry, c_ef, "Persiste cambios transaccionales", "EF Core 10")
-    Rel(c_ef, t_assign, "SQL parametrizado y verificación xmin", "TCP 5432 / Npgsql")
-    Rel(t_assign, i_active, "Verifica exclusión de asignación única", "Database Engine")
+    svc -->|"GET /api/parking-spots?statusFilter=..."| spotsCtrl
+    svc -->|"POST /api/parking-assignments & checkout"| assignCtrl
+    store -->|"GET /api/parking-assignments/active"| assignCtrl
+    assignCtrl -->|"ISender.Send"| hEntry
+    assignCtrl -->|"ISender.Send"| hChk
+    assignCtrl -->|"ISender.Send"| hAct
+    spotsCtrl -->|"ISender.Send"| hSpots
+    hEntry -->|"Aplica invariantes de negocio"| domain
+    hChk -->|"Verifica ExitTime >= EntryTime"| domain
+    hEntry -->|"Persiste asignación"| ef
+    hChk -->|"Persiste checkout y restaura Disponible"| ef
+    ef -->|"Sentencias SQL parametrizadas & xmin"| tAssign
+    tAssign -.->|"Restricción de exclusión física"| iActive
 ```
 
 ---
