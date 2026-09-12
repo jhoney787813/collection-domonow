@@ -197,4 +197,51 @@ Consulte la documentación técnica formal completa y las justificaciones de ing
 * 📦 [c4-containers.drawio](docs/architecture/c4-containers.drawio): C4 Nivel 2 - Diagrama de Contenedores.
 * 🧩 [c4-components.drawio](docs/architecture/c4-components.drawio): C4 Nivel 3 - Diagrama de Componentes (Frontend y Backend Vertical Slices).
 
+---
+
+## 8. 🔐 Diagnóstico de Seguridad — Vulnerabilidades Identificadas
+
+> **⚠️ IMPORTANTE:** La versión `v1.0.0-dev` de la plataforma incluye un login **deliberadamente inseguro** para validar el diseño funcional. Esta decisión fue tomada a propósito para demostrar que, aunque el sistema cumple con todos los requerimientos funcionales solicitados, **la seguridad no es una feature opcional — es un requisito transversal no negociable para producción.**
+
+📄 **Documento completo:** [`docs/auditoria_seguridad.md`](docs/auditoria_seguridad.md)
+
+### Resumen Ejecutivo de Hallazgos
+
+| ID | Severidad | Proyecto Afectado | Vulnerabilidad |
+|---|---|---|---|
+| SEC-001 | 🔴 **CRÍTICA** | `root-config` | Credenciales hardcodeadas (`DomoNow2026!`) en código fuente TypeScript |
+| SEC-002 | 🔴 **CRÍTICA** | `root-config` | Sesión basada exclusivamente en `localStorage` (falsificable desde consola) |
+| SEC-003 | 🔴 **CRÍTICA** | `DomoNow.Parking.Api` | API REST completamente pública — sin autenticación en ningún endpoint |
+| SEC-004 | 🔴 **CRÍTICA** | `DomoNow.Parking.Api` | Sin atributo `[Authorize]` ni control de autorización en ningún controlador |
+| SEC-005 | 🟠 **ALTA** | `root-config` | `postMessage` con wildcard `'*'` como `targetOrigin` (filtra a cualquier iframe) |
+| SEC-006 | 🟠 **ALTA** | `DomoNow.Parking.Api` | Contraseña de PostgreSQL en texto plano en `appsettings.json` versionado |
+| SEC-007 | 🟠 **ALTA** | `domonow-angular-parking` | URL de API `http://localhost:5050` hardcodeada — sin HTTPS, sin multi-entorno |
+| SEC-008 | 🟠 **ALTA** | `domonow-vue-analytics` | URL de API `http://localhost:5050` hardcodeada — sin HTTPS, sin multi-entorno |
+| SEC-009 | 🟡 **MEDIA** | `DomoNow.Parking.Api` | Swagger/OpenAPI habilitado en producción sin autenticación (expone surface de ataque) |
+| SEC-010 | 🟡 **MEDIA** | `DomoNow.Parking.Api` | `AllowedHosts: "*"` — habilita HTTP Host Header Injection |
+| SEC-011 | 🟡 **MEDIA** | `root-config` | Sin rate limiting ni lockout ante ataques de fuerza bruta en el login |
+| SEC-012 | 🟡 **MEDIA** | `root-config` | Sin expiración ni invalidación de sesión en el servidor (sesión eterna) |
+| SEC-013 | 🟡 **MEDIA** | `DomoNow.Parking.Api` | Sin audit logging de acciones sensibles — imposible trazabilidad forense |
+| SEC-014 | 🟢 **BAJA** | `root-config` | Contraseña correcta expuesta en el mensaje de error del formulario de login |
+
+### Metodología Zero Trust — Principios Violados
+
+La plataforma actual **viola los 6 principios fundamentales de Zero Trust**:
+
+| Principio | Estado |
+|---|---|
+| Verificar explícitamente (cada petición, siempre) | ❌ El backend acepta peticiones anónimas |
+| Menor privilegio posible (roles y permisos) | ❌ Sin roles ni control de autorización |
+| Asumir compromiso (detectar y responder) | ❌ Sin audit logs ni monitoreo de acceso |
+| Cifrar todo el tráfico (TLS end-to-end) | ❌ HTTP plano en todas las comunicaciones |
+| Validación continua (sesiones con expiración) | ❌ Sesiones sin expiración del lado servidor |
+| Identidades verificables e individuales | ❌ Una credencial compartida por todos los usuarios |
+
+> *"Debemos implementar la metodología ZERO TRUST la cual nos dicta no delegar todo a la IA. La IA acelera el desarrollo, pero la seguridad requiere decisión y responsabilidad humana."*
+
+### Estado: Bloqueante para Producción
+
+Los hallazgos **SEC-001 a SEC-004** son **bloqueantes absolutos** para cualquier despliegue productivo. La plataforma puede desplegarse en ambientes de demostración local únicamente, con la comprensión explícita de que no protege datos de usuarios reales.
+
+👉 **Ver diagnóstico completo, evidencia técnica, pruebas de concepto y hoja de ruta de remediación en:** [`docs/auditoria_seguridad.md`](docs/auditoria_seguridad.md)
 
