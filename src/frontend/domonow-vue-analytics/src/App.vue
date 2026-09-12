@@ -18,15 +18,15 @@ onMounted(() => {
     <header class="mfe-header">
       <div class="header-left">
         <div class="brand-pill">
-          <span class="brand-sub">ANALÍTICA PREDICTIVA & MACHINE LEARNING</span>
+          <span class="brand-sub">{{ store.t.brandSub }}</span>
         </div>
-        <h2>Demanda y Turnaround de Visitantes</h2>
-        <p class="subtitle">Modelos de probabilidad de ocupación, rotación de bahías y previsión de picos</p>
+        <h2>{{ store.t.title }}</h2>
+        <p class="subtitle">{{ store.t.subtitle }}</p>
       </div>
 
       <div class="header-right">
         <div class="date-range-badge">
-          <span>📅 Semana Actual: 08 - 14 Sep</span>
+          <span>{{ store.t.dateRange }}</span>
         </div>
       </div>
     </header>
@@ -34,27 +34,27 @@ onMounted(() => {
     <!-- Top KPI Row -->
     <div class="kpi-grid">
       <div class="kpi-card">
-        <span class="kpi-title">Visitas Registradas Hoy</span>
+        <span class="kpi-title">{{ store.t.kpiVisitsToday }}</span>
         <span class="kpi-value">{{ store.totalVisitsToday }}</span>
-        <span class="kpi-tag positive">+14% vs. promedio semanal</span>
+        <span class="kpi-tag positive">{{ store.t.kpiVsAvg }}</span>
       </div>
 
       <div class="kpi-card">
-        <span class="kpi-title">Tiempo Promedio de Estadía</span>
+        <span class="kpi-title">{{ store.t.kpiTurnaround }}</span>
         <span class="kpi-value">{{ Math.floor(store.averageTurnaroundMinutes / 60) }}h {{ store.averageTurnaroundMinutes % 60 }}m</span>
-        <span class="kpi-tag">Rotación: 2.8 visitas / cupo</span>
+        <span class="kpi-tag">{{ store.t.kpiTurnover }}</span>
       </div>
 
       <div class="kpi-card">
-        <span class="kpi-title">Tasa de Ocupación Actual</span>
+        <span class="kpi-title">{{ store.t.kpiOccupancyRate }}</span>
         <span class="kpi-value">{{ store.currentOccupancyRate }}%</span>
-        <span class="kpi-tag warning">Zona de Carga Media-Alta</span>
+        <span class="kpi-tag warning">{{ store.t.kpiZoneLabel }}</span>
       </div>
 
       <div class="kpi-card ml-kpi">
-        <span class="kpi-title">Inferencia Próximo Pico</span>
+        <span class="kpi-title">{{ store.t.kpiNextPeak }}</span>
         <span class="kpi-value">{{ store.predictedNextHourSurge }}%</span>
-        <span class="kpi-tag ml-tag">Proyección 18:00 - 20:00</span>
+        <span class="kpi-tag ml-tag">{{ store.t.kpiProjectionWindow }}</span>
       </div>
     </div>
 

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParkingStateService } from '../services/parking.service';
-import { ParkingSpot } from '../models/parking.model';
+import { I18nService } from '../services/i18n.service';
 
 @Component({
   selector: 'app-parking-grid',
@@ -42,12 +42,12 @@ import { ParkingSpot } from '../models/parking.model';
         <!-- Available Placeholder -->
         <div *ngIf="spot.status === 'Available'" class="available-info">
           <div class="pulse-indicator"></div>
-          <span class="available-text">Cupo Libre</span>
+          <span class="available-text">{{ i18n.t().freeSpot }}</span>
         </div>
 
         <!-- Out of Service Placeholder -->
         <div *ngIf="spot.status === 'OutOfService'" class="out-info">
-          <span class="out-text">Mantenimiento / Bloqueado</span>
+          <span class="out-text">{{ i18n.t().outOfServiceNotice }}</span>
         </div>
 
         <!-- Action Button -->
@@ -57,17 +57,17 @@ import { ParkingSpot } from '../models/parking.model';
             class="action-btn assign-btn"
             (click)="state.openEntryModal(spot)"
           >
-            + Asignar Ingreso
+            {{ i18n.t().assignBtn }}
           </button>
           <button
             *ngIf="spot.status === 'Occupied'"
             class="action-btn checkout-btn"
             (click)="state.openCheckoutModal(spot)"
           >
-            Registrar Salida
+            {{ i18n.t().checkoutBtn }}
           </button>
           <span *ngIf="spot.status === 'OutOfService'" class="disabled-tag">
-            No disponible
+            {{ i18n.t().disabledTag }}
           </span>
         </div>
       </div>
@@ -274,12 +274,13 @@ import { ParkingSpot } from '../models/parking.model';
 })
 export class ParkingGridComponent {
   state = inject(ParkingStateService);
+  i18n = inject(I18nService);
 
   formatStatus(status: string): string {
     switch (status) {
-      case 'Available': return 'Disponible';
-      case 'Occupied': return 'Ocupado';
-      case 'OutOfService': return 'Fuera de Servicio';
+      case 'Available': return this.i18n.t().statusAvailable;
+      case 'Occupied': return this.i18n.t().statusOccupied;
+      case 'OutOfService': return this.i18n.t().statusOutOfService;
       default: return status;
     }
   }

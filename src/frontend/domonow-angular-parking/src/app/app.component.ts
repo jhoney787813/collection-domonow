@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParkingStateService } from './services/parking.service';
+import { I18nService } from './services/i18n.service';
 import { ParkingGridComponent } from './components/parking-grid.component';
 import { EntryModalComponent } from './components/entry-modal.component';
 import { CheckoutModalComponent } from './components/checkout-modal.component';
@@ -15,19 +16,19 @@ import { CheckoutModalComponent } from './components/checkout-modal.component';
       <header class="mfe-header">
         <div class="header-left">
           <div class="brand-pill">
-            <span class="brand-sub">OPERACIONES EN VIVO</span>
+            <span class="brand-sub">{{ i18n.t().brandSub }}</span>
           </div>
-          <h2>Control de Parqueadero de Visitantes</h2>
-          <p class="subtitle">Monitoreo y asignación en tiempo real para portería y guardias de seguridad</p>
+          <h2>{{ i18n.t().title }}</h2>
+          <p class="subtitle">{{ i18n.t().subtitle }}</p>
         </div>
 
         <div class="header-right">
           <button
             class="concurrency-btn"
-            (click)="state.simulateConcurrencyRace('P-15')"
-            title="Prueba de esfuerzo con 10 requests concurrentes simultáneos"
+            (click)="onSimulateConcurrency()"
+            title="Concurrency stress test"
           >
-            ⚡ Simular Ráfaga Concurrente (P-15)
+            {{ i18n.t().concurrencyBtn }}
           </button>
         </div>
       </header>
@@ -41,61 +42,61 @@ import { CheckoutModalComponent } from './components/checkout-modal.component';
       <!-- KPI Summary Cards -->
       <div class="kpi-grid">
         <div class="kpi-card total">
-          <span class="kpi-title">Total Cupos</span>
+          <span class="kpi-title">{{ i18n.t().kpiTotalSpots }}</span>
           <span class="kpi-value">{{ state.stats().totalSpots }}</span>
-          <span class="kpi-tag">Capacidad Máxima</span>
+          <span class="kpi-tag">{{ i18n.t().kpiMaxCapacity }}</span>
         </div>
 
         <div class="kpi-card available">
-          <span class="kpi-title">Disponibles</span>
+          <span class="kpi-title">{{ i18n.t().kpiAvailable }}</span>
           <span class="kpi-value">{{ state.stats().availableSpots }}</span>
-          <span class="kpi-tag available-tag">Listos para Asignar</span>
+          <span class="kpi-tag available-tag">{{ i18n.t().kpiReadyToAssign }}</span>
         </div>
 
         <div class="kpi-card occupied">
-          <span class="kpi-title">Ocupados</span>
+          <span class="kpi-title">{{ i18n.t().kpiOccupied }}</span>
           <span class="kpi-value">{{ state.stats().occupiedSpots }}</span>
-          <span class="kpi-tag occupied-tag">{{ state.stats().occupancyPercentage }}% de Ocupación</span>
+          <span class="kpi-tag occupied-tag">{{ state.stats().occupancyPercentage }}{{ i18n.t().kpiOccupancyRate }}</span>
         </div>
 
         <div class="kpi-card out">
-          <span class="kpi-title">Fuera de Servicio</span>
+          <span class="kpi-title">{{ i18n.t().kpiOutOfService }}</span>
           <span class="kpi-value">{{ state.stats().outOfServiceSpots }}</span>
-          <span class="kpi-tag out-tag">Mantenimiento</span>
+          <span class="kpi-tag out-tag">{{ i18n.t().kpiMaintenance }}</span>
         </div>
       </div>
 
       <!-- Controls & Filter Toolbar -->
       <div class="toolbar">
         <div class="filter-group">
-          <span class="filter-label">Filtrar por:</span>
+          <span class="filter-label">{{ i18n.t().filterLabel }}</span>
           <button
             class="filter-chip"
             [class.active]="state.selectedFilter() === 'ALL'"
             (click)="state.setFilter('ALL')"
           >
-            Todos ({{ state.stats().totalSpots }})
+            {{ i18n.t().filterAll }} ({{ state.stats().totalSpots }})
           </button>
           <button
             class="filter-chip chip-available"
             [class.active]="state.selectedFilter() === 'Available'"
             (click)="state.setFilter('Available')"
           >
-            Disponibles ({{ state.stats().availableSpots }})
+            {{ i18n.t().statusAvailable }} ({{ state.stats().availableSpots }})
           </button>
           <button
             class="filter-chip chip-occupied"
             [class.active]="state.selectedFilter() === 'Occupied'"
             (click)="state.setFilter('Occupied')"
           >
-            Ocupados ({{ state.stats().occupiedSpots }})
+            {{ i18n.t().statusOccupied }} ({{ state.stats().occupiedSpots }})
           </button>
           <button
             class="filter-chip chip-out"
             [class.active]="state.selectedFilter() === 'OutOfService'"
             (click)="state.setFilter('OutOfService')"
           >
-            Fuera de Servicio ({{ state.stats().outOfServiceSpots }})
+            {{ i18n.t().statusOutOfService }} ({{ state.stats().outOfServiceSpots }})
           </button>
         </div>
       </div>
@@ -288,4 +289,17 @@ import { CheckoutModalComponent } from './components/checkout-modal.component';
 })
 export class AppComponent {
   state = inject(ParkingStateService);
+  i18n = inject(I18nService);
+
+  onSimulateConcurrency(): void {
+    const isEn = this.i18n.currentLang() === 'en';
+    const runningMsg = isEn
+      ? 'Simulating 10 concurrent requests targeting bay P-15...'
+      : 'Simulando 10 peticiones concurrentes simultáneas hacia el cupo P-15...';
+    const resultMsg = isEn
+      ? 'Concurrency Result for P-15: 1 Successful Allocation (201 Created) and 9 Rejected as Conflict (409 Conflict)! Invariant uq_parking_active_assignment preserved.'
+      : 'Resultado de Concurrencia para P-15: ¡1 Asignación Exitosa (201 Created) y 9 Rechazadas por Conflicto (409 Conflict)! Invariante uq_parking_active_assignment preservado.';
+
+    this.state.simulateConcurrencyRace('P-15', runningMsg, resultMsg);
+  }
 }

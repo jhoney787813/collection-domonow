@@ -161,11 +161,13 @@ export class ParkingStateService {
   /**
    * Concurrency Test: Simulate 10 simultaneous allocation requests targeting spot P-15
    */
-  async simulateConcurrencyRace(targetSpotNumber = 'P-15'): Promise<void> {
+  async simulateConcurrencyRace(targetSpotNumber = 'P-15', customRunningMsg?: string, customResultMsg?: string): Promise<void> {
     const target = this._spots().find(s => s.spotNumber === targetSpotNumber);
     if (!target) return;
 
-    this._concurrencyNotice.set(`Simulando 10 peticiones concurrentes simultáneas hacia el cupo ${targetSpotNumber}...`);
+    this._concurrencyNotice.set(
+      customRunningMsg || `Simulando 10 peticiones concurrentes simultáneas hacia el cupo ${targetSpotNumber}...`
+    );
 
     // Reset spot to Available for test
     this._spots.update(current =>
@@ -198,7 +200,7 @@ export class ParkingStateService {
     }
 
     this._concurrencyNotice.set(
-      `Resultado de Concurrencia para ${targetSpotNumber}: ¡1 Asignación Exitosa (201 Created) y 9 Rechazadas por Conflicto (409 Conflict)! Invariante uq_parking_active_assignment preservado.`
+      customResultMsg || `Resultado de Concurrencia para ${targetSpotNumber}: ¡1 Asignación Exitosa (201 Created) y 9 Rechazadas por Conflicto (409 Conflict)! Invariante uq_parking_active_assignment preservado.`
     );
 
     setTimeout(() => this._concurrencyNotice.set(null), 8000);

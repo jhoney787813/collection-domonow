@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ParkingStateService } from '../services/parking.service';
+import { I18nService } from '../services/i18n.service';
 
 @Component({
   selector: 'app-entry-modal',
@@ -13,14 +14,14 @@ import { ParkingStateService } from '../services/parking.service';
         <div class="modal-header">
           <div class="header-title">
             <span class="spot-pill">{{ state.activeModalSpot()?.spotNumber }}</span>
-            <h3>Registrar Ingreso de Visitante</h3>
+            <h3>{{ i18n.t().entryModalTitle }}</h3>
           </div>
           <button class="close-btn" (click)="state.closeEntryModal()">&times;</button>
         </div>
 
         <form (ngSubmit)="onSubmit()" class="modal-form">
           <div class="form-group">
-            <label for="plateInput">Placa Vehicular <span class="required">*</span></label>
+            <label for="plateInput">{{ i18n.t().licensePlateLabel }} <span class="required">*</span></label>
             <div class="input-with-badge">
               <input
                 id="plateInput"
@@ -28,27 +29,27 @@ import { ParkingStateService } from '../services/parking.service';
                 name="plate"
                 [(ngModel)]="plate"
                 (ngModelChange)="onPlateChange($event)"
-                placeholder="Ej. ABC-123 o ABC123"
+                [placeholder]="i18n.t().licensePlatePlaceholder"
                 maxlength="8"
                 class="domo-input"
                 required
                 autocomplete="off"
               />
               <span class="badge-hint" [class.valid]="isPlateValid">
-                {{ isPlateValid ? 'Formato Válido' : '5-8 Caracteres Alfanuméricos' }}
+                {{ isPlateValid ? i18n.t().plateValidHint : i18n.t().plateInvalidHint }}
               </span>
             </div>
-            <span class="helper-text">Normalización automática: mayúsculas sin guiones ni espacios.</span>
+            <span class="helper-text">{{ i18n.t().plateHelper }}</span>
           </div>
 
           <div class="form-group">
-            <label for="visitorInput">Nombre del Conductor / Visitante <span class="required">*</span></label>
+            <label for="visitorInput">{{ i18n.t().visitorLabel }} <span class="required">*</span></label>
             <input
               id="visitorInput"
               type="text"
               name="visitor"
               [(ngModel)]="visitorName"
-              placeholder="Ej. Juan Pérez"
+              [placeholder]="i18n.t().visitorPlaceholder"
               maxlength="100"
               class="domo-input"
               required
@@ -56,13 +57,13 @@ import { ParkingStateService } from '../services/parking.service';
           </div>
 
           <div class="form-group">
-            <label for="unitInput">Unidad de Destino (Apartamento/Casa) <span class="required">*</span></label>
+            <label for="unitInput">{{ i18n.t().unitLabel }} <span class="required">*</span></label>
             <input
               id="unitInput"
               type="text"
               name="unit"
               [(ngModel)]="destinationUnit"
-              placeholder="Ej. Torre 2 - Apt 402"
+              [placeholder]="i18n.t().unitPlaceholder"
               maxlength="100"
               class="domo-input"
               required
@@ -75,14 +76,14 @@ import { ParkingStateService } from '../services/parking.service';
 
           <div class="modal-actions">
             <button type="button" class="domo-btn-secondary" (click)="state.closeEntryModal()">
-              Cancelar
+              {{ i18n.t().cancelBtn }}
             </button>
             <button
               type="submit"
               class="domo-btn-primary"
               [disabled]="!isFormValid"
             >
-              Registrar Asignación
+              {{ i18n.t().submitEntryBtn }}
             </button>
           </div>
         </form>
@@ -225,6 +226,7 @@ import { ParkingStateService } from '../services/parking.service';
 })
 export class EntryModalComponent {
   state = inject(ParkingStateService);
+  i18n = inject(I18nService);
 
   plate = '';
   visitorName = '';
@@ -241,7 +243,6 @@ export class EntryModalComponent {
   }
 
   onPlateChange(val: string): void {
-    // Live upper-casing
     this.plate = val.toUpperCase();
     this.errorMessage = '';
   }
@@ -252,7 +253,7 @@ export class EntryModalComponent {
 
     const res = this.state.assignSpot(spot.id, this.plate, this.visitorName, this.destinationUnit);
     if (!res.success) {
-      this.errorMessage = res.error || 'Error al registrar ingreso.';
+      this.errorMessage = res.error || (this.i18n.currentLang() === 'en' ? 'Error assigning entry.' : 'Error al registrar ingreso.');
     } else {
       this.plate = '';
       this.visitorName = '';

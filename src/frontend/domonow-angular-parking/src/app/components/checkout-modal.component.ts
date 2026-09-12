@@ -1,6 +1,7 @@
 import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParkingStateService } from '../services/parking.service';
+import { I18nService } from '../services/i18n.service';
 
 @Component({
   selector: 'app-checkout-modal',
@@ -12,7 +13,7 @@ import { ParkingStateService } from '../services/parking.service';
         <div class="modal-header">
           <div class="header-title">
             <span class="spot-pill occupied">{{ spot()?.spotNumber }}</span>
-            <h3>Registrar Salida / Checkout</h3>
+            <h3>{{ i18n.t().checkoutModalTitle }}</h3>
           </div>
           <button class="close-btn" (click)="state.closeCheckoutModal()">&times;</button>
         </div>
@@ -20,37 +21,37 @@ import { ParkingStateService } from '../services/parking.service';
         <div class="modal-body" *ngIf="spot()?.currentAssignment as item">
           <div class="summary-card">
             <div class="data-row">
-              <span class="data-label">Placa:</span>
+              <span class="data-label">{{ i18n.t().plateLabel }}</span>
               <span class="plate-tag">{{ item.licensePlate }}</span>
             </div>
             <div class="data-row">
-              <span class="data-label">Visitante:</span>
+              <span class="data-label">{{ i18n.t().visitorNameLabel }}</span>
               <span class="data-value">{{ item.visitorName }}</span>
             </div>
             <div class="data-row">
-              <span class="data-label">Destino:</span>
+              <span class="data-label">{{ i18n.t().destinationLabel }}</span>
               <span class="data-value">{{ item.destinationUnit }}</span>
             </div>
             <div class="data-row">
-              <span class="data-label">Hora de Ingreso:</span>
+              <span class="data-label">{{ i18n.t().entryTimeLabel }}</span>
               <span class="data-value">{{ item.entryTime | date:'shortTime' }}</span>
             </div>
             <div class="data-row highlight">
-              <span class="data-label">Tiempo Transcurrido:</span>
+              <span class="data-label">{{ i18n.t().elapsedTimeLabel }}</span>
               <span class="duration-badge">{{ calculateElapsed(item.entryTime) }}</span>
             </div>
           </div>
 
           <p class="policy-note">
-            Al registrar la salida, el cupo <strong>{{ spot()?.spotNumber }}</strong> volverá a estar automáticamente <strong>Disponible</strong> para otros visitantes.
+            {{ i18n.t().checkoutPolicy }}
           </p>
 
           <div class="modal-actions">
             <button type="button" class="domo-btn-secondary" (click)="state.closeCheckoutModal()">
-              Cancelar
+              {{ i18n.t().cancelBtn }}
             </button>
             <button type="button" class="domo-btn-primary checkout-btn" (click)="onConfirmCheckout()">
-              Confirmar Salida y Liberar Cupo
+              {{ i18n.t().confirmCheckoutBtn }}
             </button>
           </div>
         </div>
@@ -187,6 +188,7 @@ import { ParkingStateService } from '../services/parking.service';
 })
 export class CheckoutModalComponent {
   state = inject(ParkingStateService);
+  i18n = inject(I18nService);
 
   readonly spot = computed(() => this.state.checkoutSpotTarget());
 

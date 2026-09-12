@@ -157,6 +157,43 @@
     .guard-role {
       color: #64748B;
     }
+    /* Language Switcher Component */
+    .lang-switcher-container {
+      display: flex;
+      align-items: center;
+      background: #F1F5F9;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 7px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-family: inherit;
+      color: #64748B;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+    .lang-btn:hover {
+      color: #0F172A;
+    }
+    .lang-btn.active {
+      background: #FFFFFF;
+      color: #6C35DE;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      font-weight: 800;
+    }
+    .lang-btn .flag {
+      font-size: 0.95rem;
+    }
 
     /* Mount Areas */
     #single-spa-application\:\@domonow\/angular-parking,
@@ -177,27 +214,37 @@
       <!-- Subproject Visual Switcher -->
       <nav class="subproject-nav">
         <a id="tab-parking" href="/parking" class="nav-tab active">
-          <span>🚗 Operaciones de Parqueadero</span>
+          <span id="label-tab-parking">🚗 Operaciones de Parqueadero</span>
           <span class="tab-badge badge-angular">Angular 19</span>
         </a>
         <a id="tab-analytics" href="/analytics" class="nav-tab">
-          <span>📈 Analítica & Demanda Predictiva</span>
+          <span id="label-tab-analytics">📈 Analítica & Demanda Predictiva</span>
           <span class="tab-badge badge-vue">Vue 3</span>
         </a>
       </nav>
     </div>
 
     <div class="shell-right">
+      <!-- Visual Language Selector (ESP / ENG) -->
+      <div class="lang-switcher-container" aria-label="Language Selector">
+        <button id="lang-btn-es" class="lang-btn active" title="Español">
+          <span class="flag">🇪🇸</span> <span>ESP</span>
+        </button>
+        <button id="lang-btn-en" class="lang-btn" title="English">
+          <span class="flag">🇺🇸</span> <span>ENG</span>
+        </button>
+      </div>
+
       <div class="property-pill">
         <span class="property-dot"></span>
-        <span>Condominio Altos de la Pradera - Torre 1 & 2</span>
+        <span id="label-property-name">Condominio Altos de la Pradera - Torre 1 & 2</span>
       </div>
 
       <div class="guard-avatar">
         <div class="avatar-circle">P1</div>
         <div class="guard-info">
-          <span class="guard-name">Portería Principal</span>
-          <span class="guard-role">Guardia de Turno</span>
+          <span id="label-guard-name" class="guard-name">Portería Principal</span>
+          <span id="label-guard-role" class="guard-role">Guardia de Turno</span>
         </div>
       </div>
     </div>

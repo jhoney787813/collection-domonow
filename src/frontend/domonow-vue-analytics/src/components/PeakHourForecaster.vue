@@ -10,8 +10,8 @@ const store = useAnalyticsStore();
     <div class="domo-card chart-card">
       <div class="card-header">
         <div>
-          <h3 class="card-title">Curva de Demanda por Hora (Hoy)</h3>
-          <p class="card-desc">Proyección estimada de ocupación entre las 06:00 y las 22:00</p>
+          <h3 class="card-title">{{ store.t.chartTitle }}</h3>
+          <p class="card-desc">{{ store.t.chartDesc }}</p>
         </div>
       </div>
 
@@ -37,40 +37,40 @@ const store = useAnalyticsStore();
     <!-- AI/ML Predictive Model Card -->
     <div class="domo-card ml-card">
       <div class="ml-badge-row">
-        <span class="ml-badge">ML INFERENCE ENGINE</span>
-        <span class="status-indicator">ONNX Runtime Active</span>
+        <span class="ml-badge">{{ store.t.mlBadge }}</span>
+        <span class="status-indicator">{{ store.t.onnxActive }}</span>
       </div>
 
-      <h3 class="ml-title">Predicción de Saturación Inminente</h3>
+      <h3 class="ml-title">{{ store.t.mlTitle }}</h3>
 
       <div class="probability-metric">
         <span class="big-percent">94%</span>
         <div class="metric-meta">
-          <span class="meta-title">Probabilidad de Pico Crítico</span>
-          <span class="meta-sub">Ventana estimada: Hoy 18:00 - 20:30</span>
+          <span class="meta-title">{{ store.t.probTitle }}</span>
+          <span class="meta-sub">{{ store.t.probWindow }}</span>
         </div>
       </div>
 
       <div class="ml-specs">
         <div class="spec-item">
-          <span class="spec-k">Algoritmo:</span>
+          <span class="spec-k">{{ store.t.algoLabel }}</span>
           <span class="spec-v">LightGBM Regressor + LSTM</span>
         </div>
         <div class="spec-item">
-          <span class="spec-k">Latencia Inferencia:</span>
-          <span class="spec-v">0.42 ms (In-Memory .NET 10)</span>
+          <span class="spec-k">{{ store.t.latencyLabel }}</span>
+          <span class="spec-v">0.42 ms (.NET 10 In-Memory)</span>
         </div>
         <div class="spec-item">
-          <span class="spec-k">Deriva (PSI):</span>
-          <span class="spec-v text-success">0.03 (Estable)</span>
+          <span class="spec-k">{{ store.t.driftLabel }}</span>
+          <span class="spec-v text-success">0.03 (Stable)</span>
         </div>
       </div>
 
       <div class="recommendation-box">
         <span class="rec-icon">💡</span>
         <div class="rec-text">
-          <strong>Acción Recomendada para Portería:</strong>
-          <span>Priorizar pre-autorización de visitantes para Torre 1 y mantener despejada bahía de desaceleración.</span>
+          <strong>{{ store.t.recTitle }}</strong>
+          <span>{{ store.t.recText }}</span>
         </div>
       </div>
     </div>

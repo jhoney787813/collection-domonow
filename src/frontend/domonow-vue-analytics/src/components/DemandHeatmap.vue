@@ -3,8 +3,6 @@ import { useAnalyticsStore } from '../stores/analyticsStore';
 
 const store = useAnalyticsStore();
 
-const timeSlotLabels = ['06:00 - 10:00', '10:00 - 14:00', '14:00 - 18:00', '18:00 - 21:00 (Pico)', '21:00 - 00:00'];
-
 function getSlotColor(rate: number): string {
   if (rate >= 90) return '#4A1E9E'; // Deepest Purple
   if (rate >= 75) return '#6C35DE'; // Domo Primary
@@ -22,36 +20,36 @@ function getTextColor(rate: number): string {
   <div class="domo-card heatmap-card">
     <div class="card-header">
       <div>
-        <h3 class="card-title">Matriz de Demanda Semanal (24x7)</h3>
-        <p class="card-desc">Probabilidad de saturación de parqueaderos por franjas horarias y días</p>
+        <h3 class="card-title">{{ store.t.heatmapTitle }}</h3>
+        <p class="card-desc">{{ store.t.heatmapDesc }}</p>
       </div>
       <div class="legend">
-        <span class="legend-label">Baja</span>
+        <span class="legend-label">{{ store.t.heatmapLow }}</span>
         <span class="legend-chip" style="background: #EDE9FE;"></span>
         <span class="legend-chip" style="background: #C4B5FD;"></span>
         <span class="legend-chip" style="background: #8B5CF6;"></span>
         <span class="legend-chip" style="background: #6C35DE;"></span>
         <span class="legend-chip" style="background: #4A1E9E;"></span>
-        <span class="legend-label">Pico (95%+)</span>
+        <span class="legend-label">{{ store.t.heatmapPeak }}</span>
       </div>
     </div>
 
     <div class="heatmap-table">
       <!-- Header Row -->
       <div class="heatmap-row header-row">
-        <div class="day-cell header-cell">Día</div>
-        <div v-for="(slot, i) in timeSlotLabels" :key="i" class="slot-header-cell">
+        <div class="day-cell header-cell">{{ store.t.dayHeader }}</div>
+        <div v-for="(slot, i) in store.t.slots" :key="i" class="slot-header-cell">
           {{ slot }}
         </div>
       </div>
 
       <!-- Data Rows -->
       <div
-        v-for="row in store.heatmapData"
-        :key="row.day"
+        v-for="(row, rowIdx) in store.heatmapRows"
+        :key="rowIdx"
         class="heatmap-row"
       >
-        <div class="day-cell">{{ row.day }}</div>
+        <div class="day-cell">{{ store.t.days[rowIdx] }}</div>
         <div
           v-for="(val, idx) in row.slots"
           :key="idx"
@@ -60,7 +58,7 @@ function getTextColor(rate: number): string {
             backgroundColor: getSlotColor(val),
             color: getTextColor(val)
           }"
-          :title="`${row.day} (${timeSlotLabels[idx]}): ${val}% de probabilidad de ocupación`"
+          :title="`${store.t.days[rowIdx]} (${store.t.slots[idx]}): ${val}%`"
         >
           <span class="cell-val">{{ val }}%</span>
         </div>

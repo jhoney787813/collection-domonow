@@ -18,9 +18,9 @@ function formatTime(isoStr: string): string {
     <div class="card-header">
       <div class="title-with-pulse">
         <span class="pulse-dot"></span>
-        <h3 class="card-title">Feed de Eventos en Tiempo Real</h3>
+        <h3 class="card-title">{{ store.t.feedTitle }}</h3>
       </div>
-      <span class="bus-tag">Inter-MFE Bus: Active</span>
+      <span class="bus-tag">{{ store.t.busActive }}</span>
     </div>
 
     <div class="activity-list">
