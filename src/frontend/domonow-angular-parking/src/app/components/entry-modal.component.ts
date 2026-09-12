@@ -81,9 +81,9 @@ import { I18nService } from '../services/i18n.service';
             <button
               type="submit"
               class="domo-btn-primary"
-              [disabled]="!isFormValid"
+              [disabled]="!isFormValid || isSubmitting"
             >
-              {{ i18n.t().submitEntryBtn }}
+              {{ isSubmitting ? (i18n.currentLang() === 'en' ? 'Processing...' : 'Procesando...') : i18n.t().submitEntryBtn }}
             </button>
           </div>
         </form>
@@ -232,6 +232,7 @@ export class EntryModalComponent {
   visitorName = '';
   destinationUnit = '';
   errorMessage = '';
+  isSubmitting = false;
 
   get isPlateValid(): boolean {
     const sanitized = this.plate.replace(/[\s\-\.]/g, '').toUpperCase();
@@ -247,18 +248,25 @@ export class EntryModalComponent {
     this.errorMessage = '';
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const spot = this.state.activeModalSpot();
-    if (!spot) return;
+    if (!spot || this.isSubmitting) return;
 
-    const res = this.state.assignSpot(spot.id, this.plate, this.visitorName, this.destinationUnit);
-    if (!res.success) {
-      this.errorMessage = res.error || (this.i18n.currentLang() === 'en' ? 'Error assigning entry.' : 'Error al registrar ingreso.');
-    } else {
-      this.plate = '';
-      this.visitorName = '';
-      this.destinationUnit = '';
-      this.errorMessage = '';
+    this.isSubmitting = true;
+    this.errorMessage = '';
+
+    try {
+      const res = await this.state.assignSpot(spot.id, this.plate, this.visitorName, this.destinationUnit);
+      if (!res.success) {
+        this.errorMessage = res.error || (this.i18n.currentLang() === 'en' ? 'Error assigning entry.' : 'Error al registrar ingreso.');
+      } else {
+        this.plate = '';
+        this.visitorName = '';
+        this.destinationUnit = '';
+        this.errorMessage = '';
+      }
+    } finally {
+      this.isSubmitting = false;
     }
   }
 }

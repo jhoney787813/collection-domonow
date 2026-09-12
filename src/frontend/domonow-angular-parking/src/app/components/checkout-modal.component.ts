@@ -50,8 +50,13 @@ import { I18nService } from '../services/i18n.service';
             <button type="button" class="domo-btn-secondary" (click)="state.closeCheckoutModal()">
               {{ i18n.t().cancelBtn }}
             </button>
-            <button type="button" class="domo-btn-primary checkout-btn" (click)="onConfirmCheckout()">
-              {{ i18n.t().confirmCheckoutBtn }}
+            <button
+              type="button"
+              class="domo-btn-primary checkout-btn"
+              [disabled]="isSubmitting"
+              (click)="onConfirmCheckout()"
+            >
+              {{ isSubmitting ? (i18n.currentLang() === 'en' ? 'Processing...' : 'Procesando...') : i18n.t().confirmCheckoutBtn }}
             </button>
           </div>
         </div>
@@ -191,6 +196,7 @@ export class CheckoutModalComponent {
   i18n = inject(I18nService);
 
   readonly spot = computed(() => this.state.checkoutSpotTarget());
+  isSubmitting = false;
 
   calculateElapsed(entryTimeIso: string): string {
     const entry = new Date(entryTimeIso);
@@ -202,9 +208,15 @@ export class CheckoutModalComponent {
     return `${hours}h ${remainingMins}m`;
   }
 
-  onConfirmCheckout(): void {
+  async onConfirmCheckout(): Promise<void> {
     const s = this.spot();
-    if (!s) return;
-    this.state.checkoutSpot(s.id);
+    if (!s || this.isSubmitting) return;
+
+    this.isSubmitting = true;
+    try {
+      await this.state.checkoutSpot(s.id);
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 }

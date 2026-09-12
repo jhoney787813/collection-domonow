@@ -4,11 +4,14 @@ import { useAnalyticsStore } from './stores/analyticsStore';
 import DemandHeatmap from './components/DemandHeatmap.vue';
 import PeakHourForecaster from './components/PeakHourForecaster.vue';
 import ActivityFeed from './components/ActivityFeed.vue';
+import ActiveAssignmentsTable from './components/ActiveAssignmentsTable.vue';
+import CustomDialog from './components/CustomDialog.vue';
 
 const store = useAnalyticsStore();
 
 onMounted(() => {
   store.initCrossMfeListener();
+  store.fetchAnalyticsData();
 });
 </script>
 
@@ -58,10 +61,16 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- Active Assignments in Visitor Parking (Real .NET 10 API & PostgreSQL) -->
+    <ActiveAssignmentsTable />
+
     <!-- Core Forecasting & Heatmap Components -->
     <DemandHeatmap />
     <PeakHourForecaster />
     <ActivityFeed />
+
+    <!-- Unified DomoNow Custom Dialog -->
+    <CustomDialog />
   </div>
 </template>
 

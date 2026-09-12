@@ -5,11 +5,12 @@ import { I18nService } from './services/i18n.service';
 import { ParkingGridComponent } from './components/parking-grid.component';
 import { EntryModalComponent } from './components/entry-modal.component';
 import { CheckoutModalComponent } from './components/checkout-modal.component';
+import { CustomDialogComponent } from './components/custom-dialog.component';
 
 @Component({
   selector: 'app-domonow-angular-parking',
   standalone: true,
-  imports: [CommonModule, ParkingGridComponent, EntryModalComponent, CheckoutModalComponent],
+  imports: [CommonModule, ParkingGridComponent, EntryModalComponent, CheckoutModalComponent, CustomDialogComponent],
   template: `
     <div class="mfe-container">
       <!-- Subproject Visual Header -->
@@ -23,6 +24,14 @@ import { CheckoutModalComponent } from './components/checkout-modal.component';
         </div>
 
         <div class="header-right">
+          <button
+            class="refresh-btn"
+            (click)="state.loadSpots()"
+            [disabled]="state.isLoading()"
+            title="Sincronizar con API .NET 10"
+          >
+            🔄 {{ state.isLoading() ? 'Sincronizando...' : 'Recargar' }}
+          </button>
           <button
             class="concurrency-btn"
             (click)="onSimulateConcurrency()"
@@ -107,6 +116,9 @@ import { CheckoutModalComponent } from './components/checkout-modal.component';
       <!-- Interactive Modals -->
       <app-entry-modal></app-entry-modal>
       <app-checkout-modal></app-checkout-modal>
+
+      <!-- DomoNow Unified Custom Dialog (Alert/Confirm/RFC-7807) -->
+      <app-custom-dialog></app-custom-dialog>
     </div>
   `,
   styles: [`
@@ -148,6 +160,35 @@ import { CheckoutModalComponent } from './components/checkout-modal.component';
       margin: 4px 0 0 0;
       color: #64748B;
       font-size: 0.9rem;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .refresh-btn {
+      background: #FFFFFF;
+      color: #334155;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .refresh-btn:hover:not(:disabled) {
+      border-color: #6C35DE;
+      color: #6C35DE;
+      background: #FAF5FF;
+    }
+    .refresh-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
     .concurrency-btn {
       background: linear-gradient(135deg, #6C35DE 0%, #4A1E9E 100%);

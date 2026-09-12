@@ -12,18 +12,39 @@ export interface ActivityEvent {
   timestamp: string;
 }
 
+export interface ActiveAssignmentDto {
+  id: string;
+  parkingSpotId: string;
+  spotNumber: string;
+  licensePlate: string;
+  visitorName: string;
+  destinationUnit: string;
+  entryTime: string;
+  elapsedMinutes: number;
+}
+
+export interface DialogData {
+  title: string;
+  message: string;
+  type: 'error' | 'success' | 'warning' | 'info';
+  statusCode?: number | string;
+  detail?: string;
+  confirmText?: string;
+  onConfirm?: () => void;
+}
+
 const vueDictionaries = {
   es: {
     brandSub: 'ANALÍTICA PREDICTIVA & MACHINE LEARNING',
     title: 'Demanda y Turnaround de Visitantes',
     subtitle: 'Modelos de probabilidad de ocupación, rotación de bahías y previsión de picos',
-    dateRange: '📅 Semana Actual: 08 - 14 Sep',
-    kpiVisitsToday: 'Visitas Registradas Hoy',
-    kpiVsAvg: '+14% vs. promedio semanal',
+    dateRange: '📅 Datos en Tiempo Real (API .NET 10)',
+    kpiVisitsToday: 'Asignaciones Activas en BD',
+    kpiVsAvg: 'Sincronizado vía PostgreSQL',
     kpiTurnaround: 'Tiempo Promedio de Estadía',
-    kpiTurnover: 'Rotación: 2.8 visitas / cupo',
-    kpiOccupancyRate: 'Tasa de Ocupación Actual',
-    kpiZoneLabel: 'Zona de Carga Media-Alta',
+    kpiTurnover: 'Cálculo dinámico en vivo',
+    kpiOccupancyRate: 'Tasa de Ocupación Real',
+    kpiZoneLabel: 'Capacidad en Vivo',
     kpiNextPeak: 'Inferencia Próximo Pico',
     kpiProjectionWindow: 'Proyección 18:00 - 20:00',
     // Heatmap
@@ -57,13 +78,13 @@ const vueDictionaries = {
     brandSub: 'PREDICTIVE ANALYTICS & MACHINE LEARNING',
     title: 'Visitor Demand & Turnaround',
     subtitle: 'Occupancy probability models, bay turnaround, and surge forecasting',
-    dateRange: '📅 Current Week: Sep 08 - 14',
-    kpiVisitsToday: 'Visits Recorded Today',
-    kpiVsAvg: '+14% vs. weekly average',
+    dateRange: '📅 Real-Time Data (.NET 10 API)',
+    kpiVisitsToday: 'Active Assignments in DB',
+    kpiVsAvg: 'Synced via PostgreSQL',
     kpiTurnaround: 'Average Turnaround Time',
-    kpiTurnover: 'Turnaround: 2.8 visits / bay',
-    kpiOccupancyRate: 'Current Occupancy Rate',
-    kpiZoneLabel: 'Medium-High Load Zone',
+    kpiTurnover: 'Live Dynamic Calculation',
+    kpiOccupancyRate: 'Real Occupancy Rate',
+    kpiZoneLabel: 'Live Capacity',
     kpiNextPeak: 'Next Peak Inference',
     kpiProjectionWindow: 'Projection 18:00 - 20:00',
     // Heatmap
@@ -96,6 +117,8 @@ const vueDictionaries = {
 };
 
 export const useAnalyticsStore = defineStore('analytics', () => {
+  const API_BASE = 'http://localhost:5050/api';
+
   // Language State
   const currentLang = ref<SupportedLang>('es');
   if (typeof window !== 'undefined') {
@@ -115,38 +138,28 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   }
 
   // Reactive Metrics State
-  const totalVisitsToday = ref(47);
-  const averageTurnaroundMinutes = ref(84); // 1h 24m
-  const currentOccupancyRate = ref(68);
+  const totalVisitsToday = ref(0);
+  const averageTurnaroundMinutes = ref(0);
+  const currentOccupancyRate = ref(0);
   const predictedNextHourSurge = ref(88);
   const isListenerAttached = ref(false);
 
-  const activities = ref<ActivityEvent[]>([
-    {
-      id: 'act-1',
-      type: 'ASSIGNMENT',
-      spotNumber: 'P-12',
-      licensePlate: 'XYZ789',
-      details: 'Ingreso a Torre 2 - Apt 901',
-      timestamp: new Date(Date.now() - 12 * 60000).toISOString()
-    },
-    {
-      id: 'act-2',
-      type: 'CHECKOUT',
-      spotNumber: 'P-05',
-      licensePlate: 'ABC123',
-      details: 'Salida completada (Duración: 65 min)',
-      timestamp: new Date(Date.now() - 28 * 60000).toISOString()
-    },
-    {
-      id: 'act-3',
-      type: 'ASSIGNMENT',
-      spotNumber: 'P-08',
-      licensePlate: 'DKM334',
-      details: 'Ingreso a Torre 3 - Apt 502',
-      timestamp: new Date(Date.now() - 45 * 60000).toISOString()
-    }
-  ]);
+  // Active Assignments from API
+  const activeAssignments = ref<ActiveAssignmentDto[]>([]);
+  const isLoadingAssignments = ref(false);
+
+  // Dialog State
+  const activeDialog = ref<DialogData | null>(null);
+
+  function openDialog(data: DialogData) {
+    activeDialog.value = data;
+  }
+
+  function closeDialog() {
+    activeDialog.value = null;
+  }
+
+  const activities = ref<ActivityEvent[]>([]);
 
   // Hourly demand curve
   const hourlyDemand = ref([
@@ -172,8 +185,76 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     { slots: [45, 60, 70, 65, 35] }
   ]);
 
+  /**
+   * Fetch Active Assignments and Spot Capacity from .NET 10 API
+   */
+  async function fetchAnalyticsData() {
+    isLoadingAssignments.value = true;
+    try {
+      const [resAssignments, resSpots] = await Promise.all([
+        fetch(`${API_BASE}/parking-assignments/active`),
+        fetch(`${API_BASE}/parking-spots`)
+      ]);
+
+      if (!resAssignments.ok) {
+        throw new Error(`Assignments API error: HTTP ${resAssignments.status}`);
+      }
+      if (!resSpots.ok) {
+        throw new Error(`Spots API error: HTTP ${resSpots.status}`);
+      }
+
+      const assignmentsData: ActiveAssignmentDto[] = await resAssignments.json();
+      const spotsData: any[] = await resSpots.json();
+
+      activeAssignments.value = assignmentsData;
+      totalVisitsToday.value = assignmentsData.length;
+
+      // Calculate Occupancy %
+      const totalCapacity = spotsData.length || 30;
+      const occupiedCount = spotsData.filter((s: any) => s.status === 2 || s.statusName === 'Occupied').length;
+      currentOccupancyRate.value = Math.round((occupiedCount / totalCapacity) * 100);
+
+      // Calculate Average Turnaround (Stay time)
+      if (assignmentsData.length > 0) {
+        const totalMinutes = assignmentsData.reduce((acc, curr) => acc + (curr.elapsedMinutes || 0), 0);
+        averageTurnaroundMinutes.value = Math.round(totalMinutes / assignmentsData.length);
+      } else {
+        averageTurnaroundMinutes.value = 0;
+      }
+
+      // Populate recent activities if empty
+      if (activities.value.length === 0 && assignmentsData.length > 0) {
+        activities.value = assignmentsData.slice(0, 5).map(a => ({
+          id: a.id,
+          type: 'ASSIGNMENT',
+          spotNumber: a.spotNumber,
+          licensePlate: a.licensePlate,
+          details: `Ingreso: ${a.visitorName} (${a.destinationUnit})`,
+          timestamp: a.entryTime
+        }));
+      }
+    } catch (err: any) {
+      console.error('[AnalyticsStore] Failed to fetch live data:', err);
+      openDialog({
+        title: 'Error de Sincronización',
+        message: 'No fue posible consultar los datos en tiempo real desde http://localhost:5050/api.',
+        type: 'error',
+        statusCode: 500,
+        detail: err.message,
+        confirmText: 'Reintentar',
+        onConfirm: () => fetchAnalyticsData()
+      });
+    } finally {
+      isLoadingAssignments.value = false;
+    }
+  }
+
   // Attach window event listeners for decoupled cross-MFE communication & i18n
   function initCrossMfeListener() {
+    if (isListenerAttached.value || typeof window !== 'undefined') {
+      fetchAnalyticsData();
+    }
+
     if (isListenerAttached.value || typeof window === 'undefined') return;
 
     // 1. Language change from custom event
@@ -190,10 +271,9 @@ export const useAnalyticsStore = defineStore('analytics', () => {
       }
     });
 
-    // 3. Operational events
+    // 3. Operational events dispatched by Angular MFE
     window.addEventListener('domonow:spot-assigned', (e: any) => {
       const detail = e.detail;
-      totalVisitsToday.value++;
       const isEn = currentLang.value === 'en';
       activities.value.unshift({
         id: crypto.randomUUID(),
@@ -204,6 +284,9 @@ export const useAnalyticsStore = defineStore('analytics', () => {
         timestamp: detail.entryTime || new Date().toISOString()
       });
       if (activities.value.length > 20) activities.value.pop();
+
+      // Automatically refresh live data from .NET 10 API
+      fetchAnalyticsData();
     });
 
     window.addEventListener('domonow:spot-released', (e: any) => {
@@ -218,6 +301,9 @@ export const useAnalyticsStore = defineStore('analytics', () => {
         timestamp: detail.exitTime || new Date().toISOString()
       });
       if (activities.value.length > 20) activities.value.pop();
+
+      // Automatically refresh live data from .NET 10 API
+      fetchAnalyticsData();
     });
 
     isListenerAttached.value = true;
@@ -231,9 +317,15 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     averageTurnaroundMinutes,
     currentOccupancyRate,
     predictedNextHourSurge,
+    activeAssignments,
+    isLoadingAssignments,
+    activeDialog,
+    openDialog,
+    closeDialog,
     activities,
     hourlyDemand,
     heatmapRows,
+    fetchAnalyticsData,
     initCrossMfeListener
   };
 });

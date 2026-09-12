@@ -22,7 +22,7 @@ export interface ParkingSpot {
   spotNumber: string;
   status: ParkingSpotStatus;
   currentAssignment?: ParkingAssignment | null;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface OperationsStats {
@@ -31,4 +31,14 @@ export interface OperationsStats {
   occupiedSpots: number;
   outOfServiceSpots: number;
   occupancyPercentage: number;
+}
+
+export interface DialogData {
+  title: string;
+  message: string;
+  type: 'error' | 'success' | 'warning' | 'info';
+  statusCode?: number | string;
+  detail?: string;
+  confirmText?: string;
+  onConfirm?: () => void;
 }
