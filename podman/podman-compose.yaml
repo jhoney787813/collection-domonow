@@ -1,6 +1,44 @@
 version: '3.8'
 
 services:
+  postgres-db:
+    image: postgres:17-alpine
+    container_name: domonow-postgres-db
+    environment:
+      POSTGRES_DB: domonow_parking
+      POSTGRES_USER: domonow_user
+      POSTGRES_PASSWORD: domonow_secret_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../open-spec/06-database-ddl.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U domonow_user -d domonow_parking"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - domonow-network
+    restart: unless-stopped
+
+  backend-api:
+    build:
+      context: ..
+      dockerfile: podman/Containerfile.backend
+    container_name: domonow-backend-api
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=postgres-db;Port=5432;Database=domonow_parking;Username=domonow_user;Password=domonow_secret_pass;Include Error Detail=true"
+      ASPNETCORE_ENVIRONMENT: "Production"
+    ports:
+      - "5050:5000"
+    networks:
+      - domonow-network
+    restart: unless-stopped
+
   root-mfe:
     build:
       context: ..
@@ -37,3 +75,6 @@ services:
 networks:
   domonow-network:
     driver: bridge
+
+volumes:
+  postgres_data:

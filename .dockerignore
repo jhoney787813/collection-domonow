@@ -1,0 +1,7 @@
+**/.git
+**/.DS_Store
+**/bin
+**/obj
+**/node_modules
+one-million-luxury-app-main/
+.agents/

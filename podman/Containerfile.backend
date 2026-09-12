@@ -1,0 +1,38 @@
+# Multi-stage Containerfile for DomoNow .NET 10 LTS Backend API
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
+WORKDIR /src
+
+# Copy project files for efficient layer caching
+COPY src/backend/DomoNow.Parking.Domain/DomoNow.Parking.Domain.csproj src/backend/DomoNow.Parking.Domain/
+COPY src/backend/DomoNow.Parking.Application/DomoNow.Parking.Application.csproj src/backend/DomoNow.Parking.Application/
+COPY src/backend/DomoNow.Parking.Infrastructure/DomoNow.Parking.Infrastructure.csproj src/backend/DomoNow.Parking.Infrastructure/
+COPY src/backend/DomoNow.Parking.Api/DomoNow.Parking.Api.csproj src/backend/DomoNow.Parking.Api/
+
+# Restore dependencies
+RUN dotnet restore src/backend/DomoNow.Parking.Api/DomoNow.Parking.Api.csproj
+
+# Copy complete source code
+COPY src/backend/DomoNow.Parking.Domain/ src/backend/DomoNow.Parking.Domain/
+COPY src/backend/DomoNow.Parking.Application/ src/backend/DomoNow.Parking.Application/
+COPY src/backend/DomoNow.Parking.Infrastructure/ src/backend/DomoNow.Parking.Infrastructure/
+COPY src/backend/DomoNow.Parking.Api/ src/backend/DomoNow.Parking.Api/
+
+# Build and publish release binaries
+RUN dotnet publish src/backend/DomoNow.Parking.Api/DomoNow.Parking.Api.csproj \
+    -c Release \
+    -o /app/publish
+
+# Runtime image stage
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS runtime
+WORKDIR /app
+
+# Non-root user for security best practices
+USER $APP_UID
+
+COPY --from=build /app/publish .
+
+ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_ENVIRONMENT=Production
+EXPOSE 5000
+
+ENTRYPOINT ["dotnet", "DomoNow.Parking.Api.dll"]

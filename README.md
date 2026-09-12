@@ -93,30 +93,102 @@ openspec new change add-reservation-feature
 
 ---
 
-## 4. Podman Machine Setup (macOS Apple Silicon)
+## 4. Podman Machine & Contenedores (PostgreSQL 17 + .NET 10 Backend + MFEs)
 
+### 4.1 Iniciar Podman Machine (macOS Apple Silicon)
 ```bash
-# Initialize and start podman machine with adequate resources
+# Inicializar y arrancar podman machine
 podman machine init --cpus 4 --memory 4096 --disk-size 50
 podman machine start
 
-# Verify podman socket
+# Verificar conectividad de Podman
 podman system info
-
-# Launch the complete local stack
-podman-compose -f podman/podman-compose.yaml up -d
 ```
 
-### Port Mapping Summary
-* **Root Shell (Single-SPA):** `http://localhost:9000`
-* **Angular 19 Parking MFE:** `http://localhost:9001`
-* **Vue 3 Analytics MFE:** `http://localhost:9002`
-* **Backend API (.NET 10):** `http://localhost:5000` (Swagger UI: `http://localhost:5000/swagger`)
-* **PostgreSQL 17 Database:** `localhost:5432` (`domonow_parking`)
+### 4.2 Despliegue de Base de Datos y Backend con Podman Compose
+El archivo [podman/podman-compose.yaml](podman/podman-compose.yaml) orquesta toda la plataforma con auto-inicialización de la base de datos PostgreSQL 17:
+
+```bash
+# Levantar todos los servicios en segundo plano
+podman compose -f podman/podman-compose.yaml up -d --build
+
+# O iniciar individualmente la base de datos y la API:
+podman compose -f podman/podman-compose.yaml up -d postgres-db
+podman compose -f podman/podman-compose.yaml up -d --build backend-api
+```
+
+### 4.3 Configuración y Conexión a la Base de Datos PostgreSQL 17
+* **Imagen:** `postgres:17-alpine`
+* **Contenedor:** `domonow-postgres-db`
+* **Host / Puerto:** `localhost:5432`
+* **Base de Datos:** `domonow_parking`
+* **Usuario:** `domonow_user`
+* **Contraseña:** `domonow_secret_pass`
+* **Cadena de Conexión:**
+  ```text
+  Host=localhost;Port=5432;Database=domonow_parking;Username=domonow_user;Password=domonow_secret_pass;Include Error Detail=true
+  ```
+* **Inicialización DDL Automática:**
+  El archivo [open-spec/06-database-ddl.sql](open-spec/06-database-ddl.sql) se monta en `/docker-entrypoint-initdb.d/01-init.sql:ro`, garantizando que en el primer arranque se creen:
+  - Tablas: `parking_spots` y `parking_assignments`.
+  - Índice Único Parcial: `uq_parking_active_assignment` (`WHERE status = 1`), asegurando matemáticamente a nivel de motor ACID que un cupo nunca tenga más de una asignación activa simultánea.
+  - Seed Data: 30 cupos comunales precargados (`P-01` a `P-30`) en estado Disponible (`1`).
+
+Para verificar directamente en PostgreSQL:
+```bash
+podman exec -it domonow-postgres-db psql -U domonow_user -d domonow_parking -c "SELECT spot_number, status FROM parking_spots ORDER BY spot_number LIMIT 5;"
+```
 
 ---
 
-## 5. Technical Architecture Documentation (C4 Model & Draw.io)
+## 5. Backend .NET 10 LTS (Clean Architecture & CQRS)
+
+Ubicado en `src/backend/`, implementa Clean Architecture segregando responsabilidades sin dependencias acopladas:
+
+```text
+src/backend/
+├── DomoNow.Parking.sln
+├── DomoNow.Parking.slnx
+├── DomoNow.Parking.Domain/              # .NET 10 / C# 14 puro: Agregados ParkingSpot y ParkingAssignment, Value Objects LicensePlate/DestinationUnit, Enums y Excepciones
+├── DomoNow.Parking.Application/         # CQRS con MediatR 12.4+, FluentValidation, Pipeline Behaviors (ValidationBehavior) y DTOs
+├── DomoNow.Parking.Infrastructure/      # EF Core 10 con Npgsql, mapeo de columna xmin (concurrencia optimista), índice uq_parking_active_assignment y Repositorios
+├── DomoNow.Parking.Api/                 # ASP.NET Core 10 Web API, Middleware RFC 7807 ProblemDetails, Swagger OpenAPI 3.1 y CORS
+└── DomoNow.Parking.UnitTests/           # xUnit + FluentAssertions: 16 pruebas automatizadas (6 invariantes de dominio y test de carrera concurrente de 10 peticiones sobre P-15)
+```
+
+### 5.1 Compilación y Pruebas
+```bash
+# Restaurar y compilar la solución
+dotnet build src/backend/DomoNow.Parking.sln -c Release
+
+# Ejecutar la suite completa de pruebas unitarias y de concurrencia
+dotnet test src/backend/DomoNow.Parking.UnitTests/DomoNow.Parking.UnitTests.csproj
+```
+
+### 5.2 Endpoints REST y Documentación Swagger
+* **Swagger UI Interactivo:** `http://localhost:5050/swagger`
+* **GET `/api/parking-spots`:** Consulta inventario de 30 cupos con filtro opcional (`?statusFilter=1|2|3`).
+* **POST `/api/parking-assignments`:** Asignación de cupo a visitante (valida placa `^[A-Z0-9]{5,8}$` y estado del cupo).
+* **POST `/api/parking-assignments/{id}/checkout`:** Registro de salida y reconciliación (valida `ExitTime >= EntryTime` retornando HTTP 400 en caso contrario, y libera el cupo a Disponible).
+* **GET `/api/parking-assignments/active`:** Consulta de vehículos activos en parqueadero con minutos transcurridos.
+
+---
+
+## 6. Mapeo de Puertos y Servicios
+
+| Servicio | Tecnología | Puerto Host | Puerto Contenedor | URL de Acceso |
+| :--- | :--- | :--- | :--- | :--- |
+| **Root Shell MFE** | Single-SPA / Vanilla TS | `9000` | `9000` | `http://localhost:9000` |
+| **Operations MFE** | Angular 19+ Standalone | `9001` | `9001` | `http://localhost:9001` |
+| **Analytics MFE** | Vue 3+ Composition API | `9002` | `9002` | `http://localhost:9002` |
+| **Backend API** | .NET 10 LTS ASP.NET Core | `5050` | `5000` | `http://localhost:5050/swagger` |
+| **Database** | PostgreSQL 17 Alpine | `5432` | `5432` | `localhost:5432` (`domonow_parking`) |
+
+*(Nota: El puerto de host del Backend API está mapeado a `5050` para evitar colisiones con el servicio AirPlay Receiver propio de macOS en el puerto `5000`)*.
+
+---
+
+## 7. Documentación Técnica de Arquitectura (C4 Model & Draw.io)
 
 Consulte la documentación técnica formal completa y las justificaciones de ingeniería en:
 * 📘 [docs/architecture/README.md](docs/architecture/README.md): Documento técnico maestro con justificación arquitectónica en lenguaje natural (Microfrontends Single-SPA, Angular 19 vs Vue 3, CQRS y Vertical Slice Architecture) y diagramas Mermaid interactivos.
@@ -124,4 +196,5 @@ Consulte la documentación técnica formal completa y las justificaciones de ing
 * 🌐 [c4-context.drawio](docs/architecture/c4-context.drawio): C4 Nivel 1 - Diagrama de Contexto del Sistema.
 * 📦 [c4-containers.drawio](docs/architecture/c4-containers.drawio): C4 Nivel 2 - Diagrama de Contenedores.
 * 🧩 [c4-components.drawio](docs/architecture/c4-components.drawio): C4 Nivel 3 - Diagrama de Componentes (Frontend y Backend Vertical Slices).
+
 

@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="DomoNow.Parking.Api/DomoNow.Parking.Api.csproj" />
+  <Project Path="DomoNow.Parking.Application/DomoNow.Parking.Application.csproj" />
+  <Project Path="DomoNow.Parking.Domain/DomoNow.Parking.Domain.csproj" />
+  <Project Path="DomoNow.Parking.Infrastructure/DomoNow.Parking.Infrastructure.csproj" />
+  <Project Path="DomoNow.Parking.UnitTests/DomoNow.Parking.UnitTests.csproj" />
+</Solution>

@@ -169,6 +169,30 @@ La IA sugirió forzar `window.location.reload()` tras guardar el idioma en `loca
 
 ---
 
+### EDR-006: Migración de Arquitectura Limpia a .NET 10 LTS y Despliegue de PostgreSQL 17 en Podman
+
+* **Fecha:** 2026-09-12
+* **Líder Técnico / Arquitecto:** Jhon Edison Hincapié García
+* **Herramientas de IA:** Google Antigravity Agent / OpenSpec Engine
+* **Componente:** `src/backend/` (`Domain`, `Application`, `Infrastructure`, `Api`, `UnitTests`), Podman Compose
+
+#### 1. Planteamiento del Problema
+Se requería migrar y adaptar los patrones del proyecto de referencia (`one-million-luxury-app-main`, originalmente en .NET 8) a la plataforma moderna **.NET 10 LTS (C# 14)**, construyendo un backend robusto con Clean Architecture, CQRS (MediatR), FluentValidation y EF Core 10 con Npgsql, conectado a un contenedor de **PostgreSQL 17** en Podman con inicialización automática idempotente desde el script DDL.
+
+#### 2. Propuesta Inicial Generada por la IA
+La IA inicialmente propuso mapear directamente el puerto `5000:5000` para el contenedor de la API en `podman-compose.yaml` y ejecutar migraciones de Entity Framework Core mediante código en el arranque de la aplicación (`db.Database.Migrate()`).
+
+#### 3. Crítica Técnica y Evaluación de Riesgos (Criterio Senior)
+* **Conflicto de Puertos en macOS:** En sistemas operativos macOS (Monterey a Sequoia), el puerto `5000` se encuentra reservado por el subsistema nativo de AirPlay Receiver (`ControlCenter`). Intentar enlazar `5000:5000` en el host produce una excepción inmediata `bind: address already in use`.
+* **Riesgo de Migraciones en Tiempo de Ejecución:** Ejecutar migraciones automáticas en el arranque de contenedores genera problemas de concurrencia cuando se despliegan múltiples réplicas en paralelo y no soporta índices avanzados específicos como el índice único parcial `uq_parking_active_assignment` de forma determinista sin soporte SQL nativo.
+
+#### 4. Decisión de Arquitectura Adoptada
+1. **Mapeo de Puerto Seguro:** Se mapeó el puerto host a `5050` (`5050:5000`), manteniendo Kestrel escuchando en `5000` internamente y evitando cualquier interferencia con servicios del sistema operativo anfitrión.
+2. **Inicialización Idempotente por Montaje DDL:** Se montó `open-spec/06-database-ddl.sql` directamente en `/docker-entrypoint-initdb.d/01-init.sql:ro` dentro del contenedor `postgres:17-alpine`, asegurando la creación atómica de la base de datos `domonow_parking`, las tablas, los 30 cupos (`P-01` a `P-30`) y el índice único parcial.
+3. **Mapeo Concurrencia Optimista xmin:** Se configuró EF Core 10 para mapear la columna de sistema `xmin` de PostgreSQL como token de concurrencia optimista (`IsRowVersion()`), respaldada por la suite de 16 pruebas automatizadas (`xUnit` + `FluentAssertions`) incluyendo la prueba de carrera concurrente de 10 peticiones simultáneas sobre `P-15` (1 HTTP 201, 9 HTTP 409).
+
+---
+
 ## 3. Matriz de Triaje y Supervisión de Revisiones de Código Asistidas por IA
 
 Durante las fases de integración y despliegue continuo en Podman, el modelo de IA ejecutó revisiones automáticas que fueron auditadas y resueltas bajo criterio senior:
