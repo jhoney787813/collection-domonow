@@ -164,13 +164,13 @@ const store = useAnalyticsStore();
   border: 1px solid #DDD6FE;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 12px;
+  padding: 18px;
 }
 .ml-badge-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
 }
 .ml-badge {
   background: #6C35DE;
@@ -187,24 +187,23 @@ const store = useAnalyticsStore();
   font-weight: 600;
 }
 .ml-title {
-  margin: 0 0 16px 0;
-  font-size: 1.1rem;
+  margin: 0;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #0F172A;
 }
 .probability-metric {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   background: #FFFFFF;
   border: 1px solid #EDE9FE;
-  padding: 14px 18px;
+  padding: 10px 14px;
   border-radius: 12px;
-  margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(108, 53, 222, 0.06);
 }
 .big-percent {
-  font-size: 2.4rem;
+  font-size: 2rem;
   font-weight: 800;
   color: #6C35DE;
   line-height: 1;
@@ -214,20 +213,19 @@ const store = useAnalyticsStore();
   flex-direction: column;
 }
 .meta-title {
-  font-size: 0.825rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #0F172A;
 }
 .meta-sub {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: #64748B;
 }
 .ml-specs {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 0.8rem;
-  margin-bottom: 16px;
+  gap: 5px;
+  font-size: 0.76rem;
 }
 .spec-item {
   display: flex;
@@ -246,13 +244,14 @@ const store = useAnalyticsStore();
 .recommendation-box {
   background: #F8FAFC;
   border-left: 3px solid #6C35DE;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 0 8px 8px 0;
   display: flex;
-  gap: 10px;
-  font-size: 0.775rem;
+  gap: 8px;
+  font-size: 0.75rem;
   color: #334155;
-  line-height: 1.4;
+  line-height: 1.35;
+  margin-top: auto;
 }
 .rec-icon {
   font-size: 1rem;
