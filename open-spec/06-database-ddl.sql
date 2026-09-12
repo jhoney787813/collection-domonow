@@ -74,3 +74,87 @@ SELECT
     NOW(),
     NOW()
 FROM generate_series(1, 30) AS s;
+
+-- 8. Seed Initial Test Data: Active & Historical Visitor Sessions
+-- 8.1 Mark maintenance spots as OutOfService (status = 3)
+UPDATE parking_spots SET status = 3, updated_at = NOW() WHERE spot_number IN ('P-29', 'P-30');
+
+-- 8.2 Seed Active Visitor Sessions (status = 1 in parking_assignments, status = 2 Occupied in parking_spots)
+DO $$
+DECLARE
+    s_id UUID;
+BEGIN
+    -- Spot P-07: Ana María López
+    SELECT id INTO s_id FROM parking_spots WHERE spot_number = 'P-07';
+    UPDATE parking_spots SET status = 2, updated_at = NOW() WHERE id = s_id;
+    INSERT INTO parking_assignments (id, parking_spot_id, license_plate, visitor_name, destination_unit, entry_time, exit_time, status, created_at, updated_at)
+    VALUES (uuid_generate_v4(), s_id, 'DMO101', 'Ana María López', 'Torre 1 - Apt 402', NOW() - INTERVAL '45 minutes', NULL, 1, NOW() - INTERVAL '45 minutes', NOW());
+
+    -- Spot P-09: Carlos Andrés Pérez
+    SELECT id INTO s_id FROM parking_spots WHERE spot_number = 'P-09';
+    UPDATE parking_spots SET status = 2, updated_at = NOW() WHERE id = s_id;
+    INSERT INTO parking_assignments (id, parking_spot_id, license_plate, visitor_name, destination_unit, entry_time, exit_time, status, created_at, updated_at)
+    VALUES (uuid_generate_v4(), s_id, 'COL823', 'Carlos Andrés Pérez', 'Torre 2 - Apt 1004', NOW() - INTERVAL '2 hours', NULL, 1, NOW() - INTERVAL '2 hours', NOW());
+
+    -- Spot P-11: Valentina Gómez
+    SELECT id INTO s_id FROM parking_spots WHERE spot_number = 'P-11';
+    UPDATE parking_spots SET status = 2, updated_at = NOW() WHERE id = s_id;
+    INSERT INTO parking_assignments (id, parking_spot_id, license_plate, visitor_name, destination_unit, entry_time, exit_time, status, created_at, updated_at)
+    VALUES (uuid_generate_v4(), s_id, 'VAL777', 'Valentina Gómez', 'Torre 3 - Apt 201', NOW() - INTERVAL '18 minutes', NULL, 1, NOW() - INTERVAL '18 minutes', NOW());
+
+    -- Spot P-13: Fernando Morales
+    SELECT id INTO s_id FROM parking_spots WHERE spot_number = 'P-13';
+    UPDATE parking_spots SET status = 2, updated_at = NOW() WHERE id = s_id;
+    INSERT INTO parking_assignments (id, parking_spot_id, license_plate, visitor_name, destination_unit, entry_time, exit_time, status, created_at, updated_at)
+    VALUES (uuid_generate_v4(), s_id, 'BOG456', 'Fernando Morales', 'Torre 1 - Apt 805', NOW() - INTERVAL '3 hours 15 minutes', NULL, 1, NOW() - INTERVAL '3 hours 15 minutes', NOW());
+
+    -- Spot P-15: Mariana Restrepo
+    SELECT id INTO s_id FROM parking_spots WHERE spot_number = 'P-15';
+    UPDATE parking_spots SET status = 2, updated_at = NOW() WHERE id = s_id;
+    INSERT INTO parking_assignments (id, parking_spot_id, license_plate, visitor_name, destination_unit, entry_time, exit_time, status, created_at, updated_at)
+    VALUES (uuid_generate_v4(), s_id, 'MED902', 'Mariana Restrepo', 'Torre 2 - Apt 503', NOW() - INTERVAL '1 hour 10 minutes', NULL, 1, NOW() - INTERVAL '1 hour 10 minutes', NOW());
+
+    -- Spot P-17: Santiago Castro
+    SELECT id INTO s_id FROM parking_spots WHERE spot_number = 'P-17';
+    UPDATE parking_spots SET status = 2, updated_at = NOW() WHERE id = s_id;
+    INSERT INTO parking_assignments (id, parking_spot_id, license_plate, visitor_name, destination_unit, entry_time, exit_time, status, created_at, updated_at)
+    VALUES (uuid_generate_v4(), s_id, 'CRA314', 'Santiago Castro', 'Torre 4 - Apt 1102', NOW() - INTERVAL '35 minutes', NULL, 1, NOW() - INTERVAL '35 minutes', NOW());
+
+    -- Spot P-28: Julián David Herrera
+    SELECT id INTO s_id FROM parking_spots WHERE spot_number = 'P-28';
+    UPDATE parking_spots SET status = 2, updated_at = NOW() WHERE id = s_id;
+    INSERT INTO parking_assignments (id, parking_spot_id, license_plate, visitor_name, destination_unit, entry_time, exit_time, status, created_at, updated_at)
+    VALUES (uuid_generate_v4(), s_id, 'DOM2026', 'Julián David Herrera', 'Torre 1 - Apt 304', NOW() - INTERVAL '50 minutes', NULL, 1, NOW() - INTERVAL '50 minutes', NOW());
+END $$;
+
+-- 8.3 Seed Historical Completed Assignments (for Analytics & Metrics)
+DO $$
+DECLARE
+    s_p01 UUID;
+    s_p02 UUID;
+    s_p04 UUID;
+    s_p05 UUID;
+    s_p08 UUID;
+    s_p10 UUID;
+    s_p12 UUID;
+    s_p14 UUID;
+BEGIN
+    SELECT id INTO s_p01 FROM parking_spots WHERE spot_number = 'P-01';
+    SELECT id INTO s_p02 FROM parking_spots WHERE spot_number = 'P-02';
+    SELECT id INTO s_p04 FROM parking_spots WHERE spot_number = 'P-04';
+    SELECT id INTO s_p05 FROM parking_spots WHERE spot_number = 'P-05';
+    SELECT id INTO s_p08 FROM parking_spots WHERE spot_number = 'P-08';
+    SELECT id INTO s_p10 FROM parking_spots WHERE spot_number = 'P-10';
+    SELECT id INTO s_p12 FROM parking_spots WHERE spot_number = 'P-12';
+    SELECT id INTO s_p14 FROM parking_spots WHERE spot_number = 'P-14';
+
+    INSERT INTO parking_assignments (id, parking_spot_id, license_plate, visitor_name, destination_unit, entry_time, exit_time, status, created_at, updated_at) VALUES
+    (uuid_generate_v4(), s_p01, 'KLR890', 'Pedro Nel Ospina', 'Torre 1 - Apt 201', NOW() - INTERVAL '6 hours', NOW() - INTERVAL '4 hours 30 minutes', 2, NOW() - INTERVAL '6 hours', NOW() - INTERVAL '4 hours 30 minutes'),
+    (uuid_generate_v4(), s_p02, 'MNB234', 'Claudia Marcela Rios', 'Torre 3 - Apt 602', NOW() - INTERVAL '7 hours', NOW() - INTERVAL '5 hours', 2, NOW() - INTERVAL '7 hours', NOW() - INTERVAL '5 hours'),
+    (uuid_generate_v4(), s_p04, 'QWE567', 'Gustavo Adolfo Buitrago', 'Torre 2 - Apt 801', NOW() - INTERVAL '8 hours', NOW() - INTERVAL '6 hours 15 minutes', 2, NOW() - INTERVAL '8 hours', NOW() - INTERVAL '6 hours 15 minutes'),
+    (uuid_generate_v4(), s_p05, 'TYU901', 'Andrea Catalina Ruiz', 'Torre 4 - Apt 305', NOW() - INTERVAL '5 hours', NOW() - INTERVAL '3 hours 45 minutes', 2, NOW() - INTERVAL '5 hours', NOW() - INTERVAL '3 hours 45 minutes'),
+    (uuid_generate_v4(), s_p08, 'OPL345', 'Juan Camilo Vargas', 'Torre 1 - Apt 1101', NOW() - INTERVAL '4 hours', NOW() - INTERVAL '2 hours 10 minutes', 2, NOW() - INTERVAL '4 hours', NOW() - INTERVAL '2 hours 10 minutes'),
+    (uuid_generate_v4(), s_p10, 'ZXC678', 'Diana Patricia Muñoz', 'Torre 3 - Apt 404', NOW() - INTERVAL '9 hours', NOW() - INTERVAL '7 hours 20 minutes', 2, NOW() - INTERVAL '9 hours', NOW() - INTERVAL '7 hours 20 minutes'),
+    (uuid_generate_v4(), s_p12, 'ASD123', 'Esteban Duque Jaramillo', 'Torre 2 - Apt 903', NOW() - INTERVAL '3 hours', NOW() - INTERVAL '1 hour 15 minutes', 2, NOW() - INTERVAL '3 hours', NOW() - INTERVAL '1 hour 15 minutes'),
+    (uuid_generate_v4(), s_p14, 'GHJ789', 'Laura Sofia Cárdenas', 'Torre 4 - Apt 502', NOW() - INTERVAL '5 hours 30 minutes', NOW() - INTERVAL '3 hours', 2, NOW() - INTERVAL '5 hours 30 minutes', NOW() - INTERVAL '3 hours');
+END $$;

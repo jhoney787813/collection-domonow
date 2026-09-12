@@ -22,7 +22,7 @@ public class ParkingAssignment
     // Parameterless constructor for EF Core
     private ParkingAssignment() { }
 
-    internal ParkingAssignment(Guid parkingSpotId, string licensePlate, string visitorName, string destinationUnit, DateTime? entryTime = null)
+    public ParkingAssignment(Guid parkingSpotId, string licensePlate, string visitorName, string destinationUnit, DateTime? entryTime = null)
     {
         Id = Guid.NewGuid();
         ParkingSpotId = parkingSpotId;

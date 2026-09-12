@@ -62,6 +62,22 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Seed initial test records if empty
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<DomoNow.Parking.Infrastructure.Data.ParkingDbContext>();
+        var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
+        await DomoNow.Parking.Infrastructure.Data.DbInitializer.SeedDataAsync(db, logger);
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
+        logger?.LogWarning(ex, "Initial seeding was bypassed or database is not yet ready.");
+    }
+}
+
 // Global Exception Handling Middleware (RFC 7807 ProblemDetails)
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
